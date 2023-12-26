@@ -83,4 +83,4 @@ url = "$BASE_URL/projects"
 
 [extra.footer]
 license = "Imprint & Privacy/Data Protection"
-license_url = "imprint"
+license_url = "/imprint"
