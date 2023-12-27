@@ -185,3 +185,9 @@ gitGraph
 
 This is a tip.
 {% end %}
+
+## Youtube
+
+{{ youtube(id="_PPWWRV6gbA?si=xIWivKfrnlbSYPRr", class="youtube") }}
+
+This is a youtube video!
