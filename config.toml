@@ -42,6 +42,16 @@ taxonomies = [{ name = "tags", rss = true, paginate_by = 5 }]
 # The default author for pages
 author = "Jojodicus"
 
+# Some posts have a german version available
+[languages.de]
+
+title = "dittrich.pro"
+description = "Meine Website für Blogs und andere nette Dinge!"
+minify_html = true
+generate_feed = true
+taxonomies = [{ name = "tags", rss = true, paginate_by = 5 }]
+author = "Jojodicus"
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola

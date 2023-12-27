@@ -1,7 +1,7 @@
 +++
-title = "Test Post"
+title = "Testpost"
 date = "2023-12-27"
-description = "Sample article, testing core markdown functionality."
+description = "Beispielartikel zum Testen der Markdown-Funktionalität."
 [taxonomies]
 tags = ["general"]
 [extra]
@@ -9,15 +9,15 @@ mermaid = true
 cover_image = "images/markdown-content.png"
 +++
 
-[Deutsche Version](@/first_post.de.md)
+[English version](@/first_post.md)
 
-This article offers a sample of basic Markdown syntax that can be used in Zola content files, also it shows whether basic HTML elements are decorated with CSS in a Zola theme.
+Dieser Artikel bietet ein Beispiel der grundlegenden Markdown-Syntax, die in Zola-Inhaltsdateien verwendet werden kann, und zeigt außerdem, ob grundlegende HTML-Elemente in einem Zola-Theme mit CSS dekoriert sind.
 
 <!--more-->
 
 ## Headings
 
-The following HTML `<h1>`—`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level while `<h6>` is the lowest.
+Die folgenden HTML-Elemente `<h1>`–`<h6>` repräsentieren sechs Ebenen von Abschnittsüberschriften. `<h1>` ist die höchste Abschnittsebene, während `<h6>` die niedrigste ist.
 
 # H1
 
@@ -31,11 +31,13 @@ The following HTML `<h1>`—`<h6>` elements represent six levels of section head
 
 ###### H6
 
-## Paragraph
+## Textabschnitt
 
 Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.
 
 Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.
+
+Ich bin zu faul alles auf Deutsch zu übersetzen...
 
 ## Blockquotes
 
