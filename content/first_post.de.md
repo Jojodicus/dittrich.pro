@@ -15,7 +15,7 @@ Dieser Artikel bietet ein Beispiel der grundlegenden Markdown-Syntax, die in Zol
 
 <!--more-->
 
-## Headings
+## Überschriften
 
 Die folgenden HTML-Elemente `<h1>`–`<h6>` repräsentieren sechs Ebenen von Abschnittsüberschriften. `<h1>` ist die höchste Abschnittsebene, während `<h6>` die niedrigste ist.
 
