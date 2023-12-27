@@ -8,6 +8,16 @@ My humble blog, built using [Zola](https://www.getzola.org/) with the [Kita](htt
 
 Normal posts go into [content/](content/) as Markdown files with enhanced syntax, with any images being stored in [static/images/](static/images/). For a sample post using all available features, see [first_post.md](content/first_post.md).
 
+## Tags
+
+Posts are categorized by tags. The ones currently in use and/or planned are:
+
+- `general`: not fitting into any other category, or, well general content...
+- `pc`: normie stuff and guides about computers
+- `hardware`: everything related to hardware
+- `software`: same, but for software
+- `development`: software, but more nerdy
+
 ## Local debugging
 
 To host the website locally for debugging purposes, run:
