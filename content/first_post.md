@@ -122,6 +122,12 @@ Tables aren't part of the core Markdown spec, but Zola supports supports them ou
   - Milk
   - Cheese
 
+## Images
+
+![alt text](/card.png)
+
+![alt text](/card.gif)
+
 ## Other Elements — abbr, sub, sup, kbd, mark
 
 <abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
