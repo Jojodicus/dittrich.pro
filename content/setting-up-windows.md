@@ -34,7 +34,7 @@ When checking your RAM speed with third party programs, you will sometimes find 
 
 Normally, a CPU can only access the graphic card's VRAM in 256 MB blocks at a time. This can become a bottleneck when trying to upload multiple gigabytes worth of textures. With Resizable BAR, you can essentially make the visible block as large as the whole available VRAM, improving performance depending on the game.
 
-To enable it, make sure **CSM is disabled**. On brand new systems it should be, but just to be on the safe side. Then, **enable both "Above 4G Decoding" and "Resizable BAR"** (sometimes also called SAM). You will also have to enable support for it in the GPU driver, more on that in a [later section](#resizable-bar-1).
+To enable it, make sure **CSM is disabled**. On brand new systems it should be, but just to be on the safe side. Then, **enable both Above 4G Decoding and Resizable BAR** (sometimes also called SAM). You will also have to enable support for it in the GPU driver, more on that in a [later section](#resizable-bar-1).
 
 ## ErP
 
