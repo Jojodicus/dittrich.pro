@@ -9,7 +9,7 @@ mermaid = true
 cover_image = "images/markdown-content.png"
 +++
 
-[English version](@/first_post.md)
+[English version](@/test-post.md)
 
 Dieser Artikel bietet ein Beispiel der grundlegenden Markdown-Syntax, die in Zola-Inhaltsdateien verwendet werden kann, und zeigt außerdem, ob grundlegende HTML-Elemente in einem Zola-Theme mit CSS dekoriert sind.
 
