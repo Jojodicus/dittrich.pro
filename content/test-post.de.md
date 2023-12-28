@@ -191,9 +191,64 @@ gitGraph
 
 ## Admonition
 
+{% admonition(type="note", title="Note") %}
+
+This is a note.
+{% end %}
+
+{% admonition(type="abstract", title="Abstract") %}
+
+This is an abstract.
+{% end %}
+
+{% admonition(type="info", title="Info") %}
+
+This is an info.
+{% end %}
+
 {% admonition(type="tip", title="Tip") %}
 
 This is a tip.
+{% end %}
+
+{% admonition(type="success", title="Success") %}
+
+This is a success.
+{% end %}
+
+{% admonition(type="question", title="Question") %}
+
+This is a question.
+{% end %}
+
+{% admonition(type="warning", title="Warning") %}
+
+This is a warning.
+{% end %}
+
+{% admonition(type="failure", title="Failure") %}
+
+This is a failure.
+{% end %}
+
+{% admonition(type="danger", title="Danger") %}
+
+This is a danger.
+{% end %}
+
+{% admonition(type="bug", title="Bug") %}
+
+This is a bug.
+{% end %}
+
+{% admonition(type="example", title="Example") %}
+
+This is an example.
+{% end %}
+
+{% admonition(type="quote", title="Quote") %}
+
+This is a quote.
 {% end %}
 
 ## Youtube
