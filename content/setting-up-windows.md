@@ -187,7 +187,7 @@ Although they might look pretty nice, RGB lights essentially only provide disadv
 
 ### Wallpaper
 
-To avoid messy interpolation, choose a wallpaper with the exact resolution of you monitors (or an integer multiple of that). Or if that's not possible, simply the highest resolution wallpaper you can find.
+To avoid messy interpolation, choose a wallpaper with the exact resolution of your monitors (or an integer multiple of that). Or if that's not possible, simply the highest resolution wallpaper you can find.
 
 {% admonition(type="example", title="Example") %}
 If you have two 2560x1440 monitors side by side, either look for 5120x1440 images or 2560x1440 (or a multiple like 5120x2880) if you want the same wallpaper on both monitors.
