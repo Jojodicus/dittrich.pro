@@ -27,7 +27,7 @@ When working within the UEFI, it's often recommended to have the matching manual
 XMP, like its derivatives EXPO and DOCP, is a predefined overclocking configuration for your RAM. After installing your RAM and booting for the first time, it will most likely not run at its advertised speeds, but at the default JEDEC-specification, often 2133 MTs for ddr4 and 4800 MTs for ddr5 respectively. To run at advertised speeds, **enable XMP** in the UEFI.
 
 {% admonition(type="info", title="Info") %}
-When checking your RAM speed with third party programs, you will sometimes find a frequency of half of the selected transfer speed (i.e. 3000 MHz for 6000 MTs). This is because DDR memory initiates two transfers for each clock cycle.
+When checking your RAM speed with third-party programs, you will sometimes find a frequency of half of the selected transfer speed (i.e. 3000 MHz for 6000 MTs). This is because DDR memory initiates two transfers for each clock cycle.
 {% end %}
 
 ## Resizable BAR
@@ -66,11 +66,11 @@ Now that we're out of the UEFI, we can further focus on programs and settings wi
 
 ## Drivers
 
-The first stop will be drivers. Normally, an OS should manage these for us, with manual intervention only being necessary if something breaks or performs poorly. Most drivers are provided by Windows Update and are tested to be stable under almost all operating conditions. For this reason, Windows ships driver updates very conservatively, as mismatching versions can break programs in subtle and hard to notice ways.
+The first stop will be drivers. Normally, an OS should manage these for us, with manual intervention only being necessary if something breaks or performs poorly. Most drivers are provided by Windows Update and are tested to be stable under almost all operating conditions. For this reason, Windows ships driver updates very conservatively, as mismatching versions can break programs in subtle and hard to notice ways, more on that [later](#driver-boosters).
 
 ### GPU
 
-Pretty much the only driver where we want to trade stability for the most up-to-date performance is the graphics driver. Even when going up a single driver version, performance in games can improve drastically. The specialized driver can also provide additional settings and features, such as [Adaptive Sync](#adaptive-sync) or [Latency Reduction](#latency-reduction), which we will cover shortly.
+Pretty much the only driver where we want to trade stability for the most up-to-date performance is the graphics driver. Even when going up a single driver version, performance in games can improve drastically. The specialized driver can also provide additional settings and features, such as [Variable Refresh Rate](#vrr) or [Latency Reduction](#latency-reduction), which we will cover shortly.
 
 The installation steps depend on your dedicated GPU:
 
@@ -82,16 +82,20 @@ The installation steps depend on your dedicated GPU:
 For typical usage, I don't recommend downloading the beta drivers. They give up too much stability for experimental and sometimes detrimental changes, so stick to the normal versions.
 {% end %}
 
-#### Adaptive Sync
-
-You've probably heard of this under the marketing names NVIDIA G-Sync and AMD FreeSync. Although the names are different, they essentially all do the same thing: sync your monitor's refresh rate to the game's frame rate. This has the advantage of completely eliminating screen tearing, while also keeping input latency down.
+#### VRR
 
 ![An example of heavy screen tearing](/images/screen-tearing.jpg)
+
+You've probably heard of Variable Refresh Rate under the marketing names NVIDIA G-Sync, AMD FreeSync or the general term Adaptive Sync. Although the names are different, they essentially all do the same thing: sync your monitor's refresh rate to the game's frame rate. This has the advantage of completely eliminating screen tearing, while also keeping input latency down.
 
 To enable the feature, you will need a compatible monitor with the feature enabled in its <abbr title="On Screen Display">OSD</abbr>. Then, head over into your GPU driver and find a setting called **G-Sync, FreeSync or Adaptive Sync and enable it**.
 
 {% admonition(type="info", title="Info") %}
 Keep in mind that Adaptive Sync will only work if your frame rate is below your refresh rate. Above that, it does nothing.
+{% end %}
+
+{% admonition(type="warning", title="Warning") %}
+VRR can sometimes interfere with HDR and <abbr title="Black Frame Insertion">BFI</abbr> blur reduction. Check your monitor's manual and choose settings fitting to your preferences.
 {% end %}
 
 #### Latency Reduction
@@ -114,45 +118,92 @@ This can sometimes be especially important for relatively new <abbr title="Netwo
 
 ## Display Settings
 
+Outside of the graphics driver, we can also check settings within the Windows display settings itself.
+
 ### Resolution and Refresh Rate
+
+Especially when using monitors with high refresh rate, Windows sometimes fails to recognize this and defaults to something slower like 60 Hz. To check wether you are using the full capabilities of your monitor, head over into the display settings and check that both **resolution and refresh rate is set to the maximum**. Refresh rate is hidden under advanced settings for each monitor.
 
 ### HDR
 
+![SDR vs HDR](/images/sdr-hdr.webp)
+
+Some monitors have support for HDR, providing very bright highlights for content that supports it. With modern games doing so, you can often get a nice visual upgrade for no noticeable performance cost. To use it, you will again first have to **enable it within the <abbr title="On Screen Display">OSD</abbr>**. After that, the option should appear and work with supported games. For content on the normal desktop, Windows provides an option called Auto HDR. Turn it on and see if you like it, there is always the option of turning it off afterwards.
+
+{% admonition(type="warning", title="Warning") %}
+Using HDR can sometimes interfere with VRR or <abbr title="Black Frame Insertion">BFI</abbr> blur reduction. Check your monitor's manual and choose settings fitting to your preferences.
+{% end %}
+
 ## Autostart
 
-(teams, onedrive, spotify, etc)
+When trying to optimize Windows for performance, the main goal is reducing the number of running background processes. Some people even focus so much on this, they end up breaking their system completely for negligible gains, more on that [later](#things-you-should-not-do). Something you can and should do, however, is cleaning up your autostart from unneeded programs.
+
+To do so, open up Task Manager (which has the keybind <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd></kbd>) and go to the autostart tab. Sort by status and disable every program you don't need started automatically and running in the background. When in doubt about specific programs, leave them as is. Some notable things the average person can disable are: Teams, OneDrive and Spotify.
 
 ## Game Mode
 
+This should be turned on by default, but it can be good to double check within Windows Settings. When enabled, this feature will prioritize game instances and turn off background routines like driver updates or sending restart notifications. Since it's from Windows itself, you won't have to worry about breaking things like with third-party game boosters.
+
 ## TRIM
+
+Again, this should already be enabled when having an SSD in your system. TRIM is a feature of SSDs where data is marked unused on the drive. For best performance, due to how SSDs work, this is not done immediately when deleting files, but done in batches once in a while. This can essentially be thought of as the SSD equivalent of defragmentation, which was used for HDDs. Because these are closely related, they share the same setting, called Defragment and Optimize Drives. In this menu, select your SSDs and **check if scheduled optimization is turned on**.
 
 ## Sticky Keys
 
+This can be something very annoying, especially in clutch situations. Windows has an accessability feature, where by quickly pressing one of <kbd>Ctrl</kbd>, <kbd>Alt</kbd>, <kbd>Shift</kbd> or <kbd>Win</kbd> keys 5 times, it will act as though the key is pressed continuously and make an annoying sound for good measure. To prevent this, **turn off Sticky Keys in the Accessability Settings**.
+
 ## Telemetry
+
+If you didn't opt out of Microsoft's data collection during the installation, you should do that now. Telemetry only brings disadvantages to the user, running in the background and reducing privacy by sending usage data to Microsoft. To turn it off, go to the **Privacy and Security tab withing Windows Settings** and disable everything mentioning data collection.
+
+{% admonition(type="warning", title="Warning") %}
+Disabling the underlying services completely is heavily discouraged, as this might break your system with future updates, or prevent you from receiving updates at all.
+{% end %}
 
 ## Software
 
+The next section will be about software for daily use. Keep in mind that only you yourself are responsible for the things you install on your system. Never install things from unknown sources or with questionable reputation.
+
 ### Web Browser
 
-(brave, firefox, ..., mullvad, librewolf, waterfox, ungoogled chromium) - no opera
+Probably the one third-party program used the most. This is also a reason why the choice of which web browser to use should be carefully considered. In general, you want a good performing browser with good compatibility, which won't sell your data to outsiders. My personal recommendations include:
 
-### Office Suite
+- [Brave](https://brave.com/)
+- [Firefox](https://www.mozilla.org/en-US/firefox/new/)
+- [Mullvad](https://mullvad.net/en/download/browser/windows), also a good VPN provider
+- [Librewolf](https://librewolf.net/)
+- [Waterfox](https://www.waterfox.net/)
+- [Ungoogled Chromium](https://ungoogled-software.github.io/)
 
-free - onlyoffice
+Because of privacy concerns, the usage of mainstream browsers like Edge, Chrome or especially Opera is heavily discouraged. Even though the latter one might look tempting for an aspiring gaming enthusiast, think about what is actually behind the seemingly innocent program:
+
+{{ youtube(id="bNrAn1LzaWg?si=7H_IbJuwGtPx2u3Z", class="youtube") }}
+
+As for plug-ins/extensions, an adblocker like [uBlock](https://github.com/gorhill/uBlock) is advised. [Sponsorblock](https://sponsor.ajay.app/) is also a nice addition when watching a lot of YouTube.
+
+### RGB Software
+
+Although they might look pretty nice, RGB lights essentially only provide disadvantages for gaming PCs: more power draw, distracting and, when controlling them with software, always one potentially hungry background process more. Especially when combining multiple ecosystems of lights from different manufacturers, the burden of using multiple (potentially conflicting) programs just to change the color animations can be pretty big. If your hardware supports it, try using a universal software like [OpenRGB](https://openrgb.org/) or [SignalRGB](https://signalrgb.com/), or even better: don't use RGB in the first place.
 
 ### Wallpaper
 
+To avoid messy interpolation, choose a wallpaper with the exact resolution of you monitors (or an integer multiple of that). Or if that's not possible, simply the highest resolution wallpaper you can find.
+
+{% admonition(type="example", title="Example") %}
+If you have two 2560x1440 monitors side by side, either look for 5120x1440 images or 2560x1440 (or a multiple like 5120x2880) if you want the same wallpaper on both monitors.
+{% end %}
+
+Usage of animated wallpapers along the lines of Wallpaper Engine or Lively is discouraged, especially when using more than one display. This is because in order to render the animation, it can hog system resources which are then not available to get the best gaming performance. Normally, the animation should stop when a game is started or the wallpaper is blocked by other windows, but this can't be relied on. It will also heavily increase idle power consumption, as the system is always busy rendering, even on the desktop with no programs open.
+
 # Things you should *not* do
+
+Speaking of things you should avoid, the following section is dedicated to exactly that. These are things often mentioned by so called "Optimization Guides", but are in reality detrimental to your system's stability and can lead to very hard to find issues in the long run.
 
 ## Driver Boosters
 
 ## Cleaners
 
 ccleaner etc
-
-## Tweakers
-
-diabling firewall/defender/mitigations, includes custom iso
 
 ## Third-party Antivirus
 
@@ -161,3 +212,7 @@ diabling firewall/defender/mitigations, includes custom iso
 use balanced
 
 ## Disabling Services
+
+## Tweakers
+
+diabling firewall/defender/mitigations, includes custom iso
