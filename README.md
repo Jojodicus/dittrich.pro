@@ -6,7 +6,7 @@ My humble blog, built using [Zola](https://www.getzola.org/) with the [Kita](htt
 
 ## Usage reference
 
-Normal posts go into [content/](content/) as Markdown files with enhanced syntax, with any images being stored in [static/images/](static/images/). For a sample post using all available features, see [first_post.md](content/first_post.md).
+Normal posts go into [content/](content/) as Markdown files with enhanced syntax, with any images being stored in [static/images/](static/images/). For a sample post using all available features, see [first_post.md](content/test-post.md).
 
 ## Tags
 
