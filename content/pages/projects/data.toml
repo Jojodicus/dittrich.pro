@@ -1,4 +1,13 @@
 [[project]]
+name = "dittrich.pro"
+desc = "Zola blog, you're looking at it right now!"
+tags = []
+links = [
+    { name = "website", url = "https://dittrich.pro"},
+    { name = "github", url = "https://github.com/Jojodicus/dittrich.pro"},
+]
+
+[[project]]
 name = "bhw-dc-bot"
 desc = "Discord bot for the Ben's-Hardware community"
 tags = []
