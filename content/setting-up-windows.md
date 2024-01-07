@@ -150,6 +150,10 @@ Again, this should already be enabled when having an SSD in your system. TRIM is
 
 This can be something very annoying, especially in clutch situations. Windows has an accessability feature, where by quickly pressing one of <kbd>Ctrl</kbd>, <kbd>Alt</kbd>, <kbd>Shift</kbd> or <kbd>Win</kbd> keys 5 times, it will act as though the key is pressed continuously and make an annoying sound for good measure. To prevent this, **turn off Sticky Keys in the Accessability Settings**.
 
+## Enhanced Pointer Precision
+
+Similarly, enhanced pointer precision, or better known as mouse acceleration, can also be something quite annoying. When playing games, you ideally want the mouse acceleration completely flat, such that the same distance covered on the mouse mat always equals the same distance turned in game, regardless of how fast you move your mouse. Enhanced pointer precision works against that, increasing sensitivity the faster you move, which can mess with muscle memory. This isn't as relevant nowadays, since most games use raw input anyways and thus circumvent the pointer options from Windows. Some games, like Minecraft, don't do this though, so it's commonly advised to turn the setting of anyways. To do so, **open the mouse tab in Windows Settings, then click on "Additional mouse options". Under the Pointer Options tab, uncheck "Enhance pointer precision"**.
+
 ## Telemetry
 
 If you didn't opt out of Microsoft's data collection during the installation, you should do that now. Telemetry only brings disadvantages to the user, running in the background and reducing privacy by sending usage data to Microsoft. To turn it off, go to the **Privacy and Security tab withing Windows Settings** and disable everything mentioning data collection.
