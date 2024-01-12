@@ -5,7 +5,7 @@ description = "Step-by-step guide for installing a fresh copy of windows or repl
 [taxonomies]
 tags = ["pc", "software"]
 [extra]
-cover_image = "images/windows-bloom.png"
+cover_image = "images/windows-bloom.jpg"
 +++
 
 # **UNDER CONSTRUCTION**
