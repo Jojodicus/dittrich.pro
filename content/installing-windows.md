@@ -56,25 +56,25 @@ For creating the installation medium, these are the three main methods:
 
 ## Option 1: MCT
 
-Official tool.
+Using the Media Creation Tool is the official method provided by Microsoft on the [Windows download page](https://www.microsoft.com/en-us/software-download/windows11). It's a small executable which does both the downloading of the installation image, as well as the flashing onto the USB drive.
 
-[Windows 11](https://www.microsoft.com/en-us/software-download/windows11)
+After downloading and executing the program, click on the option to create a medium for another pc. Select your desired version and language, then choose the option for a USB stick and select the plugged in drive. The image will then be downloaded and written to the USB.
+
+The Media Creation Tool can also be used to generate an ISO image. This feature is rather redundant nowadays, since you can also download the image from the website directly.
 
 ## Option 2: Rufus
 
-Get ISO.
-Robust. Can bypass some Windows 11 restrictions in a user-friendly way.
+[Rufus](https://rufus.ie/en/) is a third-party tool for flashing ISO images onto USB drives. This is particularly nice when you want to create multiple installation media or already have the ISO file downloaded on your system. In practice, Rufus has also proven to be both faster and more reliable than the officially provided tool, so it might be worth a try if you have no luck with [Option 1](#option-1-mct).
 
-[Rufus](https://rufus.ie/en/)
+Another nice feature is the customization, which even includes bypassing several installation restrictions for Windows 11 (like forced use of TPM 2.0 and Secure Boot) in a user-friendly way. Ideally, you don't want to need them, but they are there just in case.
 
 ## Option 3: Ventoy
 
-Also needs ISO.
-Multiple ISOs on one drive.
-Useful for Tools [MemTest86](https://www.memtest86.com/) or Linux distros.
-Some more functionality like preserved space for other data (like normal USB stick).
+The third option, [Ventoy](https://www.ventoy.net/en/index.html), is among my personal favorites. Again, you will need to download a Windows ISO separately. But once you do and installed Ventoy onto your USB drive, you can simply drag and drop the ISO into the Ventoy partition. And even better, you can use multiple different ISOs at the same time as well! During boot, you can then select any of the stored ISOs and boot them.
 
-[Ventoy](https://www.ventoy.net/en/index.html)
+For this reason, Ventoy is often used by pc technicians for an all-purpose stick, often with diagnostic tools like [MemTest86](https://www.memtest86.com/) or other Linux distros. There is also a lot of customization and extra features, including optional automatic restriction bypasses just like Rufus.
+
+Ventoy is also the preferred way for creating Windows installation media on Linux, as it's by far the most user-friendly way.
 
 # Setting up the UEFI
 
