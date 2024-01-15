@@ -8,11 +8,6 @@ tags = ["pc", "software"]
 cover_image = "images/windows-bloom.jpg"
 +++
 
-# **UNDER CONSTRUCTION**
----
----
----
-
 In the following guide, we will go over the steps needed to install Windows for the first time and for reinstalling an already existing installation. The images for the steps are shown in a <abbr title="Virtual Machine">VM</abbr>, but the installation procedure is exactly the same when installing for bare-metal hardware.
 
 # Backing up old Data
@@ -78,72 +73,107 @@ Ventoy is also the preferred way for creating Windows installation media on Linu
 
 # Setting up the UEFI
 
-Confront mainboard manual for specific instructions.
-Update if not on newest version, update file can be on installation medium.
-For Windows 11: CSM/legacy off, secure boot on, (f)TPM on, enroll factory keys.
+We will first check a few settings are in the UEFI (historically and colloquially sometimes called BIOS) of your mainboard. When working within the UEFI, it's recommended to have the matching manual open for reference, either as a book or digitally on a phone or second PC/Laptop. The manual often provides even more information about specific settings and where to find them, as the builtin explanations and search functions are typically rather lacking. If your mainboard didn't come with a physical copy, you can find the digital version on the website of your mainboard's manufacturer (i.e. Asus, MSI, ...). The manual will also include on how to get into the UEFI in the first place, as different brands have different keybinds for it. The most common one, however, is by spamming <kbd>Insert</kbd> while booting.
+
+The first thing we will do is make sure our UEFI is on the most up-to-date version. This is important for system stability, security and also for some features that were unavailable in previous versions. Most manufacturers have a detailed guide on the website, in the manual or as a YouTube video on how to update your UEFI firmware. The most common and reliable option is often an image file downloaded from the website. This has to be put onto a FAT32 formatted USB stick - for which we can conveniently also use our recently created installation medium - and then selected within the UEFI update option.
+
+The settings we want to change are only mandatory for Windows 11, but are nice to have nonetheless. These include:
+
+- Disabling CSM, sometimes also called Legacy Boot
+- Enabling Secure Boot, with the selection being on Windows
+- Enabling (f)TPM
+
+
+{% admonition(type="info", title="Info") %}
+Sometimes for Secure Boot, you will have to enroll the factory keys for it to work properly.
+{% end %}
 
 # Preparing Drives
 
-Disconnect every drive you don't want Windows installed on.
-Plug in installation medium and (re)boot.
-In UEFI or during boot, select the usb drive as boot override.
+Before booting your installation medium, we want to make sure our partitions will be set-up properly. Because of the way the Windows installer works, having multiple drives can be an issue. For one, if you have multiple different drives with the same capacity in your system, those can be very hard to distinguish during setup, as drives will only show with a generic name and their capacity. Also, Windows likes to insert a recovery partition into all connected drives during installation. The problem with this is: once installed this way, Windows can refuse to boot if a drive, which was there during installation, is missing. To avoid both of these problems, disconnect (or disable it in the UEFI) every drive you don't want Windows installed on prior to installation.
+
+Now, we are ready to plug in the installation medium and (re)boot into the UEFI. There, we will select the ESP (which should be named Windows Boot Manager) of our stick as a Boot Override. After rebooting, we will be greeted with the Windows Setup.
 
 # Installation
 
+The installation steps are pretty self-explanatory. For important settings and other quirks, the recommended steps are shown below.
+
 ## Select Language
 
-![language](/images/windows-install/setup-language.png)
+![Choose language preferences](/images/windows-install/setup-language.png)
+
+Here we can change the default language options. These are mostly necessary for the setup, as they can also be changed later within Windows itself. But choosing the preferred language now is of course recommended.
 
 ## Product Key
 
-![product key](/images/windows-install/setup-key.png)
+![Providing a product key](/images/windows-install/setup-key.png)
 
-License. Can also be skipped for now.
-Digital licenses connected to Microsoft accounts can be migrated from an old system later.
+The setup will ask us for the product key of our license. This can be skipped for now. If you already had a valid license and are reinstalling, Windows will automatically activate it again when the installation is complete and has access to the internet. If your license is connected to your Microsoft account, logging into that later will also activate Windows. Digital single-PC licenses can be migrated from an old system later in the Activation Settings as well.
 
-When buying licenses, look for CoA sticker or, for OEM, documentation of license origin and transfer. Some sites sell keys only, illegitimate. When going the illegal route, can also use activation scripts (MAS) - free and no data for third parties.
+When buying a license, look for a CoA sticker on the box. Or for OEM versions, documentation of the license origin and transfer. This will spare you from potential legal trouble with illicit licenses.
+
+{% admonition(type="danger", title="Danger") %}
+Some sites sell keys only, without providing a license. These cheap keys often come from very shady practices and won't allow you to use Windows legally. Microsoft does not seem to care about this too much, for average consumers at least. But when they do, [it can get very uncomfortable](https://www.pcgameshardware.de/Windows-Software-122001/News/Billige-Lizenzkeys-illegal-1367974/).
+
+When going the illegal route, there is also the option of activation scripts like [MAS](https://massgrave.dev/). These will activate Windows for free, without you also having to provide payment data to third parties (which can and have been used for legal actions). Use at your own responsibility.
+
+**If possible, it is heavily recommended to get a legitimate license.**
+{% end %}
 
 ## Choose Version
 
-![version](/images/windows-install/setup-version.png)
+![Choose version](/images/windows-install/setup-version.png)
 
-Windows 11 Home or Pro
+Here we choose our desired version. If you already have a license and want to use it, choose the version applicable to that.
 
-Differences are marginal for gaming use
+The two notable options are Home and Pro (without any suffixes). The differences are marginal for the average consumer/gamer. If you plan on using any of these features, they will only be available with Pro:
 
-Then accept the license terms and continue
+- Hyper-V (for virtual machines running Windows)
+- BitLocker (for <abbr title="Full Disk Encryption">FDE</abbr>)
+- Remote Desktop
+
+Some functionalities are also available on Home with free third-party software like [VeraCrypt](https://veracrypt.fr/en/Home.html) for encryption.
+
+After choosing your version, accept the license terms and continue.
 
 ## Drive Setup
 
-![previous installation](/images/windows-install/setup-disks-written.png)
+After choosing a custom install, we will set up the required partitions. Or rather, let Windows set them up for us.
 
-![drive selection](/images/windows-install/setup-disks-free.png)
+If the drive already had an installation of Windows on it before, it will look something like this:
 
-Choose custom install
+![Drive setup with previous installation](/images/windows-install/setup-disks-written.png)
 
-If there are already partitions, delete all.
-Press next on free space.
+Delete every partition, now we have:
 
-It will install, then reboot. You can remove the installation medium.
-If setup starts again, check your boot sequence.
+![Drive selection](/images/windows-install/setup-disks-free.png)
+
+Click next while having the unallocated space selected.
+
+The setup will then install Windows and reboot. During the restart countdown, you can remove the installation medium. If you keep your USB stick plugged in and the setup starts again after rebooting, check your boot sequence in the UEFI and change the new installation as the top entry.
 
 ## First Start Setup
 
-![telemetry](/images/windows-install/post-setup-telemetry.png)
-
 Go through installation, Windows will explain things along the way.
-Good rule of thumb: say no to everything, be it telemetry, OneDrive or anything else. Opt-out sometimes really hidden.
 
-Tip: needs internet, sometimes drivers are not provided by installation medium. Shift+F10 and `OOBE\BYPASSNRO`
+![Telemetry options](/images/windows-install/post-setup-telemetry.png)
 
-![offline account](/images/windows-install/post-setup-ms-account.png)
+For the telemetry and optional software like OneDrive or Office, a good rule of thumb is to say no to everything. The opt-out button is sometimes really hidden.
 
-![offline oops](/images/windows-install/post-setup-oops.png)
+{% admonition(type="tip", title="Tip") %}
+The Setup requires an active internet connection. Sometimes, network drivers are not provided by the installation medium, making this impossible. To bypass this requirement, press <kbd><kbd>Shift</kbd>+<kbd>F10</kbd></kbd>. This will bring up a command line. Type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>. The system will now reboot and can then be installed without internet. After the installation, you can then manually get the drivers from your mainboard's website.
+{% end %}
 
-Tip: offline install - type a@a.com for email, then a for password
+The installer will ask you to log into your Microsoft account. If don't want to log in and use a local account, there is also a way to bypass this. For the E-Mail, type in `a@a.com`, then random letters for the password:
+
+![Requires Microsoft account](/images/windows-install/post-setup-ms-account.png)
+
+![Bypass account requirement](/images/windows-install/post-setup-oops.png)
+
+Now, after pressing next, you will be able to continue the installation without a Microsoft account.
 
 # Post Installation
 
 ![finished](/images/windows-install/finished-install.png)
 
-See [my other post](@/setting-up-windows.md)
+You now have a fresh installation of Windows, ready to start customizing and installing games. For optimal performance, I recommend looking at [my other post](@/setting-up-windows.md). There, we will go over the optimal settings to ensure a trouble-free experience.
