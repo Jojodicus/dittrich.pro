@@ -17,6 +17,8 @@ Posts are categorized by tags. The ones currently in use and/or planned are:
 - `hardware`: everything related to hardware
 - `software`: same, but for software
 - `development`: software, but more nerdy
+- `fau`: things for university
+- `pfp`: for uni course "parallel & functional programming"
 
 ## Local debugging
 
