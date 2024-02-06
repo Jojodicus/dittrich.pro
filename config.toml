@@ -91,6 +91,6 @@ url = "$BASE_URL/tags"
 name = "Projects"
 url = "$BASE_URL/projects"
 
-[extra.footer]
-license = "Imprint & Privacy/Data Protection"
-license_url = "/imprint"
+# [extra.footer]
+# license = "Imprint & Privacy/Data Protection"
+# license_url = "/imprint"

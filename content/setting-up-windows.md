@@ -156,7 +156,7 @@ Similarly, enhanced pointer precision, or better known as mouse acceleration, ca
 
 ## Telemetry
 
-If you didn't opt out of Microsoft's data collection during the installation, you should do that now. Telemetry only brings disadvantages to the user, running in the background and reducing privacy by sending usage data to Microsoft. To turn it off, go to the **Privacy and Security tab withing Windows Settings** and disable everything mentioning data collection.
+If you didn't opt out of Microsoft's data collection during the installation, you should do that now. Telemetry only brings disadvantages to the user, running in the background and reducing privacy by sending usage data to Microsoft. To turn it off, go to the **Privacy and Security tab within Windows Settings** and disable everything mentioning data collection.
 
 {% admonition(type="warning", title="Warning") %}
 Disabling the underlying services completely is heavily discouraged, as this might break your system with future updates, or prevent you from receiving updates at all.
