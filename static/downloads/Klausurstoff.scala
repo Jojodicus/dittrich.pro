@@ -33,7 +33,7 @@ def getExamTopics: List[List[String]] => Int => List[String] =
   }
 
 @main
-def main(): Unit = {
+def mainK(): Unit = {
   println(flatten(List(List("A", "B"), List("C", "A")))) // == List("A", "B", "C", "A")
   println(count(List("A", "B", "C", "A"))) // == List(("A",2), ("B",1), ("C",1))
   println(getExamTopics(topics)(3)) // == List("Deadlock", "Multicore", "Petri")

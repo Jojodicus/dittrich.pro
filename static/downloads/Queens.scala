@@ -35,7 +35,7 @@ def solve: List[Field] => List[Field] = queens => {
 }
 
 @main
-def main(): Unit = {
+def mainQ(): Unit = {
   println(getFreeRows(List(('a', 4), ('c', 6), ('h', 1)))) // == List(2, 3, 5, 7, 8)
   val solved = solve(Nil)
   println(solve(Nil))
