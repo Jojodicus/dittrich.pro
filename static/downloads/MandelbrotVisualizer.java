@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MandelbrotVisualizer extends JPanel {
-	private boolean[][] field;
+	private final boolean[][] field;
 
 	public MandelbrotVisualizer(boolean[][] field) {
 		this.field = field;
