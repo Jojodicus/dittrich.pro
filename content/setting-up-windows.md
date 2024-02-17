@@ -20,6 +20,8 @@ The first few settings are in the UEFI (historically and colloquially sometimes 
 
 When working within the UEFI, it's often recommended to have the matching manual open for reference, either as a book or digitally on a phone or second PC/Laptop. The manual often provides even more information about specific settings and where to find them, as the builtin explanations and search functions are typically rather lacking. If your mainboard didn't come with a physical copy, you can find the digital version on the website of your mainboard's manufacturer (i.e. Asus, MSI, ...). The manual will also include on how to get into the UEFI in the first place, as different brands have different keybinds for it. The most common one, however, is by spamming <kbd>Insert</kbd> while booting.
 
+It's recommended make sure the UEFI is on the most up-to-date version. This is important for system stability, security and also for some features that were unavailable in previous versions. Most manufacturers have a detailed guide on the website, in the manual or as a YouTube video on how to update your UEFI firmware. The most common and reliable option is often an image file downloaded from the website. This has to be put onto a FAT32 formatted USB stick and then selected within the UEFI update option.
+
 ## XMP
 
 XMP, like its derivatives EXPO and DOCP, is a predefined overclocking configuration for your RAM. After installing your RAM and booting for the first time, it will most likely not run at its advertised speeds, but at the default JEDEC-specification, often 2133 MTs for ddr4 and 4800 MTs for ddr5 respectively. To run at advertised speeds, **enable XMP** in the UEFI.
@@ -89,7 +91,7 @@ You've probably heard of Variable Refresh Rate under the marketing names NVIDIA 
 To enable the feature, you will need a compatible monitor with the feature enabled in its <abbr title="On Screen Display">OSD</abbr>. Then, head over into your GPU driver and find a setting called **G-Sync, FreeSync or Adaptive Sync and enable it**.
 
 {% admonition(type="info", title="Info") %}
-Keep in mind that Adaptive Sync will only work if your frame rate is below your refresh rate. Above that, it does nothing.
+Keep in mind that VRR will only work if your frame rate is below your refresh rate. Above that, it does nothing.
 {% end %}
 
 {% admonition(type="warning", title="Warning") %}
@@ -146,6 +148,10 @@ This should be turned on by default, but it can be good to double check within W
 
 Again, this should already be enabled when having an SSD in your system. TRIM is a feature of SSDs where data is marked unused on the drive. For best performance, due to how SSDs work, this is not done immediately when deleting files, but done in batches once in a while. This can essentially be thought of as the SSD equivalent of defragmentation, which was used for HDDs. Because these are closely related, they share the same setting, called Defragment and Optimize Drives. In this menu, select your SSDs and **check if scheduled optimization is turned on**.
 
+## File name extensions
+
+By default, Windows will hide the extension from file names (i.e. the `.txt`, `.mp4` etc part). But a lot of people prefer knowing exactly what kind of file they are dealing with. Even more, there have been reports in the past about malware spreading with fake file name extensions, being name something along the lines of `document.pdf.exe`. With file extensions hidden, one might assume this is a harmless pdf file (as it's showing up as `document.pdf`), though in reality it's in fact malware disguised as one. To enable file name extensions, open up Explorer and check it under View - Show - File name extensions.
+
 ## Sticky Keys
 
 This can be something very annoying, especially in clutch situations. Windows has an accessability feature, where by quickly pressing one of <kbd>Ctrl</kbd>, <kbd>Alt</kbd>, <kbd>Shift</kbd> or <kbd>Win</kbd> keys 5 times, it will act as though the key is pressed continuously and make an annoying sound for good measure. To prevent this, **turn off Sticky Keys in the Accessability Settings**.
@@ -153,6 +159,10 @@ This can be something very annoying, especially in clutch situations. Windows ha
 ## Enhanced Pointer Precision
 
 Similarly, enhanced pointer precision, or better known as mouse acceleration, can also be something quite annoying. When playing games, you ideally want the mouse acceleration completely flat, such that the same distance covered on the mouse mat always equals the same distance turned in game, regardless of how fast you move your mouse. Enhanced pointer precision works against that, increasing sensitivity the faster you move, which can mess with muscle memory. This isn't as relevant nowadays, since most games use raw input anyways and thus circumvent the pointer options from Windows. Some games, like Minecraft, don't do this though, so it's commonly advised to turn the setting of anyways. To do so, **open the mouse tab in Windows Settings, then click on "Additional mouse options". Under the Pointer Options tab, uncheck "Enhance pointer precision"**.
+
+## HAGS
+
+Hardware Accelerated GPU Scheduling is an option within the graphics tab in Windows Settings. For the vast majority of games, you will have better performance with HAGS enabled. Though for some games and systems, it can also be detrimental. Try it out for yourself and see what gives you the best experience.
 
 ## Telemetry
 
@@ -231,6 +241,14 @@ Not particularly related to performance, but rather security. Using a third-part
 Antivirus is something you don't want to rely on. Use your own brain, don't click on fishy links or download untrusted software. The following video sums it up nicely:
 
 {{ youtube(id="ZxzvHXT0NXw?si=lp0q_dMK3Pl8f_uM", class="youtube") }} (subtitles available)
+
+## Exitlag
+
+Though it might seem that using Exitlag, your ping will improve, in reality it won't. What Exitlag essentially does, is creating a proxy connection to their servers (similar to how a VPN works), hoping to "improve" routing. In almost all cases, doing this extra stop will greatly *reduce* performance. The reason people think Exitlag actually helps, is because it changes how the ping is calculated in-game. Instead of measuring the real end-to-end latency, it will now show the latency between the game-servers and the Exitlag proxy. But even though the ping now seems lower, actual latency is increased. also, in their privacy policy (which also has a lot of grammatical errors), they are very open about how they sell your data to pretty much everyone that asks for it.
+
+## FilterKeys
+
+This more than 10 year old program has seen a recent resurgence for some reason. People believe messing with settings in there will somehow improve latency. The only thing FilterKeys does, is change the settings of how key strokes are repeated when you hold down a key. This will change nothing about the latency in general, especially since most games nowadays use raw-input anyways, completely bypassing any input processing done by the OS itself.
 
 ## Power Plans
 

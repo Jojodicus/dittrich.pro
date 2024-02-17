@@ -129,7 +129,7 @@ Here we choose our desired version. If you already have a license and want to us
 The two notable options are Home and Pro (without any suffixes). The differences are marginal for the average consumer/gamer. If you plan on using any of these features, they will only be available with Pro:
 
 - Hyper-V (for virtual machines running Windows)
-- BitLocker (for <abbr title="Full Disk Encryption">FDE</abbr>)
+- BitLocker (for <abbr title="Full Disk Encryption">FDE</abbr> of non-OS drives)
 - Remote Desktop
 
 Some functionalities are also available on Home with free third-party software like [VeraCrypt](https://veracrypt.fr/en/Home.html) for encryption.
@@ -161,7 +161,7 @@ Go through installation, Windows will explain things along the way.
 For the telemetry and optional software like OneDrive or Office, a good rule of thumb is to say no to everything. The opt-out button is sometimes really hidden.
 
 {% admonition(type="tip", title="Tip") %}
-The Setup requires an active internet connection. Sometimes, network drivers are not provided by the installation medium, making this impossible. To bypass this requirement, press <kbd><kbd>Shift</kbd>+<kbd>F10</kbd></kbd>. This will bring up a command line. Type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>. The system will now reboot and can then be installed without internet. After the installation, you can then manually get the drivers from your mainboard's website.
+The Setup requires an active internet connection. Sometimes, network drivers are not provided by the installation medium, making this impossible. To bypass this requirement, press <kbd><kbd>Shift</kbd>+<kbd>F10</kbd></kbd>. This will bring up a command line. Type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>. The system will now reboot and can then be installed without internet. After the installation, you can then manually get the drivers from your mainboard's website via another system with internet access. Download them onto a USB drive (the one used as an installation medium will suffice) and install them on your new system, you should be able to connect to the internet then.
 {% end %}
 
 The installer will ask you to log into your Microsoft account. If don't want to log in and use a local account, there is also a way to bypass this. For the E-Mail, type in `a@a.com`, then random letters for the password:
