@@ -166,7 +166,7 @@ Hardware Accelerated GPU Scheduling is an option within the graphics tab in Wind
 
 {% admonition(type="info", title="Info")%}
 HAGS is needed for DLSS Frame Generation. If you want to use that feature, HAGS must be enabled.
-{% %}
+{% end %}
 
 ## Telemetry
 
