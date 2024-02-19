@@ -164,6 +164,10 @@ Similarly, enhanced pointer precision, or better known as mouse acceleration, ca
 
 Hardware Accelerated GPU Scheduling is an option within the graphics tab in Windows Settings. For the vast majority of games, you will have better performance with HAGS enabled. Though for some games and systems, it can also be detrimental. Try it out for yourself and see what gives you the best experience.
 
+{% admonition(type="info", title="Info")%}
+HAGS is needed for DLSS Frame Generation. If you want to use that feature, HAGS must be enabled.
+{% %}
+
 ## Telemetry
 
 If you didn't opt out of Microsoft's data collection during the installation, you should do that now. Telemetry only brings disadvantages to the user, running in the background and reducing privacy by sending usage data to Microsoft. To turn it off, go to the **Privacy and Security tab within Windows Settings** and disable everything mentioning data collection.
