@@ -40,14 +40,14 @@ For the USB drive, all contents will be deleted when formatting for the installe
 If you don't have a second PC, ask a friend or family member if you can download the installer on their system. A public system, for example in a library, can also do. Administrator access is not required to create the installation medium.
 
 {% admonition(type="note", title="Note") %}
-Creating the installation medium on macOS can be hit or miss, the steps for doing so are also rather complicated. Usage of a Windows or Linux system is preferred.
+Creating the installation medium on macOS can be hit or miss, the steps for doing so are also rather complicated (see [below](#option-4-manual-iso-copy)). Usage of a Windows or Linux system is preferred.
 {% end %}
 
 {% admonition(type="info", title="Info") %}
 For those more technically inclined: writing the ISO to the drive via `dd` will not work, the installer will not boot. It has to be written via ISO-copy mode.
 {% end %}
 
-For creating the installation medium, these are the three main methods:
+For creating the installation medium, these are the four main methods:
 
 ## Option 1: MCT
 
@@ -70,6 +70,31 @@ The third option, [Ventoy](https://www.ventoy.net/en/index.html), is among my pe
 For this reason, Ventoy is often used by pc technicians for an all-purpose stick, often with diagnostic tools like [MemTest86](https://www.memtest86.com/) or other Linux distros. There is also a lot of customization and extra features, including optional automatic restriction bypasses just like Rufus.
 
 Ventoy is also the preferred way for creating Windows installation media on Linux, as it's by far the most user-friendly way.
+
+## Option 4: Manual ISO Copy
+
+Following are the steps necessary for macOS. Since none of the tools above are available for the operating system, creating the installation medium has to be done manually. The main problem here is that one of the necessary files for installation (`install.wim`) is larger than 4 GiB, thus not fitting onto a FAT32 partition. In general, there are two ways to go about this:
+
+1. Splitting the `install.wim`.
+2. Putting it onto its own partition.
+
+The first option is detailed [here](https://www.freecodecamp.org/news/how-make-a-windows-10-usb-using-your-mac-build-a-bootable-iso-from-your-macs-terminal/). The second option is a bit simpler in my opinion, so I will go over the rough steps here.
+
+The ISO file is essentially an image containing all necessary files for booting into the installation medium. When we want to create a bootable medium from that ourself, we have to partition our USB stick accordingly, then unpack the ISO image and copy all the files onto the USB. As previously stated, the problem here is our `install.wim` file being larger than 4 GiB. So we create a second NTFS partition on the drive where we put this file. In general, the layout of the USB stick should look like this:
+
+```
+GPT formatted USB stick
+├─ FAT32 partition
+│  ├─ other files and folders...
+│  └─ sources/
+│     ├─ other files and folders...
+│     └─ (no install.wim)
+└─ NTFS partition
+   └─ sources/
+      └─ install.wim
+```
+
+With this, the stick should be EFI-bootable and should install Windows without problems.
 
 # Setting up the UEFI
 
