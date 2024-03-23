@@ -68,6 +68,8 @@ lazy_async_image = true
 
 [extra]
 # Put all your custom variables here
+# Enable comment support globally.
+comment = true
 
 [extra.profile]
 
@@ -94,3 +96,17 @@ url = "$BASE_URL/projects"
 # [extra.footer]
 # license = "Imprint & Privacy/Data Protection"
 # license_url = "/imprint"
+
+[extra.giscus]
+repo = "jojodicus/dittrich.pro"
+repo_id = "R_kgDOK97ZzA"
+category = "General"
+category_id = "DIC_kwDOK97ZzM4CeLcX"
+mapping = "pathname"
+strict = 1
+reactions_enabled = 0
+emit_metadata = 0
+input_position = "top"
+theme = "transparent_dark"
+lang = "en"
+loading = "lazy"

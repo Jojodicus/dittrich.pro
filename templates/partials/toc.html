@@ -1,0 +1,53 @@
+{% if page.toc %}<!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        {% for h1 in page.toc %}
+        <li>
+        <a class="no-underline hover:underline" href="{{ h1.permalink | safe }}"
+            >{{ h1.title }}</a
+        >
+        {% if h1.children %}
+        <ul>
+            {% for h2 in h1.children %}
+            <li>
+            <a class="no-underline hover:underline" href="{{ h2.permalink | safe }}"
+                >{{ h2.title }}</a
+            >
+            {% if h2.children %}
+            <ul>
+                {% for h3 in h2.children %}
+                <li>
+                <a class="no-underline hover:underline" href="{{ h3.permalink | safe }}"
+                    >{{ h3.title }}</a
+                >
+                {% if h3.children %}
+                <ul>
+                    {% for h4 in h3.children %}
+                    <li>
+                    <a class="no-underline hover:underline" href="{{ h4.permalink | safe }}"
+                        >{{ h4.title }}</a
+                    >
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </details>
+</div>
+{% endif %}
