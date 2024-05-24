@@ -16,7 +16,7 @@ Zur Zeile 5
 Kontakt:  
 E-Mail: webmaster{ *at* }dittrich.pro
 
-Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:  
+Verantwortlich für den Inhalt nach § 18 MStV:  
 Johannes Dittrich  
 Zur Zeile 5  
 91090 Effeltrich
