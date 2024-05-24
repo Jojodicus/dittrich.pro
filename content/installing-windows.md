@@ -33,11 +33,11 @@ Especially for reinstalls, **MAKE SURE TO GET EVERYTHING**. After reinstalling, 
 Next, we create the installation medium where we store the files for the Windows installer. The requirements for this are:
 
 - USB drive with at least 8 GB of storage
-- Second PC or Laptop
+- PC or Laptop with a functioning operating system
 
 For the USB drive, all contents will be deleted when formatting for the installer, so it's a good idea to back those up as well if they are of importance.
 
-If you don't have a second PC, ask a friend or family member if you can download the installer on their system. A public system, for example in a library, can also do. Administrator access is not required to create the installation medium.
+For fresh installs, the install medium has to be created with a second PC/Laptop, since the main PC does not have an operating system yet. If you don't have a second PC, ask a friend or family member if you can download and run the installer on their system. A public system, for example in a library, can also do, depending on the configuration. But keep in mind that administrator access is required to create the installation medium.
 
 {% admonition(type="note", title="Note") %}
 Creating the installation medium on macOS can be hit or miss, the steps for doing so are also rather complicated (see [below](#option-4-manual-iso-copy)). Usage of a Windows or Linux system is preferred.
@@ -94,7 +94,7 @@ GPT formatted USB stick
       └─ install.wim
 ```
 
-With this, the stick should be EFI-bootable and should install Windows without problems.
+With this, the stick should be universally EFI-bootable and should install Windows without problems.
 
 # Setting up the UEFI
 
@@ -179,7 +179,7 @@ The setup will then install Windows and reboot. During the restart countdown, yo
 
 ## First Start Setup
 
-Go through installation, Windows will explain things along the way.
+Go through the installation, Windows will explain things along the way.
 
 ![Telemetry options](/images/windows-install/post-setup-telemetry.png)
 
@@ -196,6 +196,10 @@ The installer will ask you to log into your Microsoft account. If don't want to 
 ![Bypass account requirement](/images/windows-install/post-setup-oops.png)
 
 Now, after pressing next, you will be able to continue the installation without a Microsoft account.
+
+{% admonition(type="info", title="Info") %}
+For some systems, this method does not work, with the setup again asking for valid credentials. To bypass this, press <kbd><kbd>Shift</kbd>+<kbd>F10</kbd></kbd>, type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>, just like one would do for a no-internet installation. After the system reboots, bring up the terminal again with <kbd><kbd>Shift</kbd>+<kbd>F10</kbd></kbd> and type in `ipconfig /release`, then press <kbd>Enter</kbd>. This will disable the internet for the setup, making a purely offline installation possible, even with a LAN-cable plugged in. The setup will ask for a internet connection anyways, simply skip it and let it continue without internet access.
+{% end %}
 
 # Post Installation
 

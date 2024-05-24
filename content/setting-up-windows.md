@@ -12,7 +12,7 @@ cover_image = "images/windows-glow.jpg"
 
 You've built your brand new gaming PC and installed Windows as your operating system. But now you want to actually use it for its intended purpose and set it up to your liking. In this guide, we will go over the most important settings for a smooth gaming experience. And consequently, about things you should ideally avoid.
 
-Keep in mind this is all based on my personal opinion. If you feel like something is wrong or missing, feel free to contact me!
+Keep in mind this is all based on my personal opinion. If you feel like something is wrong or missing, you can comment down below or contact me directly!
 
 # UEFI Settings
 
@@ -86,7 +86,7 @@ For typical usage, I don't recommend downloading the beta drivers. They give up 
 
 ![An example of heavy screen tearing](/images/screen-tearing.jpg)
 
-You've probably heard of Variable Refresh Rate under the marketing names NVIDIA G-Sync, AMD FreeSync or the general term Adaptive Sync. Although the names are different, they essentially all do the same thing: sync your monitor's refresh rate to the game's frame rate. This has the advantage of completely eliminating screen tearing, while also keeping input latency down.
+You've probably heard of Variable Refresh Rate under the marketing names NVIDIA G-Sync, AMD FreeSync or the general term Adaptive Sync. Although the names are different, they essentially all do the same thing: sync your monitor's refresh rate to the game's frame rate. This has the advantage of eliminating screen tearing, while also keeping input latency down.
 
 To enable the feature, you will need a compatible monitor with the feature enabled in its <abbr title="On Screen Display">OSD</abbr>. Then, head over into your GPU driver and find a setting called **G-Sync, FreeSync or Adaptive Sync and enable it**.
 
@@ -105,6 +105,10 @@ Another part where you can sink hours into is trying to find the optimal setting
 {{ youtube(id="K_k1mjDeVEo?si=HXHJuDoxdp85D2dI", class="youtube") }}
 
 The video above will go into a lot more details about how each of these technologies works, but for a one-stop-solution, **enabling NVIDIA Reflex in games or AMD Anti-Lag+ in the driver** is the easiest method for a near-perfect result.
+
+{% admonition(type="info", title="Info") %}
+To combine latency reduction with the elimination of tearing (see [VRR](#VRR)), it can be beneficial to set a fps-limit slightly below the monitor's refresh rate. So, with a 144 Hz monitor, games can be capped to ~142 Hz at the driver level. This will ensure that both latency reduction and VRR are operating together.
+{% end %}
 
 #### Resizable BAR
 
