@@ -62,7 +62,8 @@ highlight_theme = "visual-studio-dark"
 # Whether to set decoding="async" and loading="lazy" for all images
 # When turned on, the alt text must be plain text.
 # For example, `![xx](...)` is ok but `![*x*x](...)` isn’t ok
-lazy_async_image = true
+# FIXME: this breaks TOC for headings lower down the page, was still working in 0.18 but seems broken in 0.19.2
+# lazy_async_image = true
 
 [extra]
 # Put all your custom variables here
