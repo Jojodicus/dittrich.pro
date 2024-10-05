@@ -104,7 +104,7 @@ Another part where you can sink hours into is trying to find the optimal setting
 
 {{ youtube(id="K_k1mjDeVEo?si=HXHJuDoxdp85D2dI", class="youtube") }}
 
-The video above will go into a lot more details about how each of these technologies works, but for a one-stop-solution, **enabling NVIDIA Reflex in games or AMD Anti-Lag+ in the driver** is the easiest method for a near-perfect result.
+The video above will go into a lot more details about how each of these technologies works, but for a one-stop-solution, **enabling NVIDIA Reflex or AMD Anti-Lag** is the easiest method for a near-perfect result.
 
 {% admonition(type="info", title="Info") %}
 To combine latency reduction with the elimination of tearing (see [VRR](#VRR)), it can be beneficial to set a fps-limit slightly below the monitor's refresh rate. So, with a 144 Hz monitor, games can be capped to ~142 Hz at the driver level. This will ensure that both latency reduction and VRR are operating together.
@@ -171,6 +171,16 @@ Hardware Accelerated GPU Scheduling is an option within the graphics tab in Wind
 {% admonition(type="info", title="Info")%}
 HAGS is needed for DLSS Frame Generation. If you want to use that feature, HAGS must be enabled.
 {% end %}
+
+## VBS/HVCI
+
+Virtualization-based Security or Hypervisor-Protected Code Integrity is a security feature that runs kernel code essentially in a virtual machine, making critical processes separate from the user's environment. For Windows 11, this is on by default.
+
+Because of virtualization, the performance impact is quite big, especially for programs that require frequent interactions with the kernel, such as games. Disabling VBS/HVCI can improve FPS, though it does make it easier for an attacker that already has user access to escalate privileges and potentially run kernel level malware.
+
+You can decide for yourself if this is worth it to you. My recommendation is: if you really need the performance, disable VBS/HVCI. If performance is good enough either way, leave it enabled.
+
+To enable/disable this feature, **toggle Memory Integrity under Core Isolation in the Windows Security Settings**.
 
 ## Telemetry
 
