@@ -1,4 +1,4 @@
-{% if page.toc %}<!---->
+{% if page.toc and not page.extra.disable_toc%}<!---->
 <div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
   <details>
     <summary class="cursor-pointer py-1 pl-4">

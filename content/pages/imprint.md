@@ -1,10 +1,10 @@
 +++
 title = "Imprint & Privacy/Data Protection [German]"
 path = "imprint"
-toc = false
+authors = [""]
 [extra]
-author = ""
 comment = false
+disable_toc = true
 +++
 
 ## Angaben gemäß § 5 DDG
