@@ -6,7 +6,7 @@ description = "Sample article, testing core markdown functionality."
 tags = ["general"]
 [extra]
 mermaid = true
-cover_image = "images/markdown-content.png"
+cover.image = "images/markdown-syntax.png"
 +++
 
 [Deutsche Version](@/test-post.de.md)

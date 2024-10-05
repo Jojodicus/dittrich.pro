@@ -1,3 +1,4 @@
+{% import "macros.html" as macros %}
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,18 +18,63 @@
   <!-- Meta -->
   <meta name="theme-color" />
 
-  <!-- Author -->
   {% if page %}
-  <meta name="description" content="{{ page.summary | default(value=page.title) | safe }}" />
-  <meta name="author" content="{{ page.extra.author | default(value=page.title) }}" />
+  <!-- Author -->
+  {% set page_title = page.title | default(value=config.title) %}
+  <!---->
+  {% set description = page.description | default(value=page_title) %}
+  <!---->
+  {% if page.authors | length > 0 %}
+  <!---->
+  {% set author = page.authors | join(sep=", ") %}
+  <!---->
   {% else %}
-  <meta name="description" content="{{ config.description | default(value=`A personal blog`) }}" />
+  <!---->
+  {% set author = config.author | default(value=config.title) %}
+  <!---->
+  {% endif %}
+  <!---->
+  <meta name="description" content="{{ description }}" />
+  <meta name="author" content="{{ author }}" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ page_title }}" />
+  <meta property="og:site_name" content="{{ config.title }}" />
+  <meta property="og:description" content="{{ description }}" />
+  <meta property="og:url" content="{{ page.permalink }}" />
+  {% if page.extra.cover.image %}
+  <!---->
+  {% set image = page.extra.cover.image %}
+  <!---->
+  {% elif config.extra.social_image %}
+  <!---->
+  {% set image = config.extra.social_image %}
+  <!---->
+  {% endif %}
+  <!---->
+  {% if image %}
+  <meta property="og:image" content="{{ get_url(path=image) }}" />
+  {% endif %}
+  <!---->
+  {% else %}
+  <!-- Author -->
+  {% set description = config.description | default(value="A personal blog") %}
+  <!---->
+  <meta name="description" content="{{ description }}" />
   <meta name="author" content="{{ config.author | default(value=config.title) }}" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ config.title }}" />
+  <meta property="og:description" content="{{ description }}" />
+  <meta property="og:url" content="{{ get_url(path=``) }}" />
+  {% if config.extra.social_image %}
+  <meta property="og:image" content="{{ get_url(path=config.extra.social_image) }}" />
+  {% endif %}
+  <!---->
   {% endif %}
 
   <!-- CSS & JS -->
   <link rel="preload stylesheet" as="style" href="{{ get_url(path=`main.css`) }}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- MODIFIED -->
   <style>
     :root {
       --bg: {{ config.extra.style.bg_color | default(value="#f4f4f5") }};
@@ -48,7 +94,7 @@
   {% if config.extra.profile.social %}
   <!---->
   {% for social in config.extra.profile.social %}
-  <link rel="preload" as="image" href="{{ get_url(path=`icons/` ~ social.name ~ `.svg`) }}" />
+  <link rel="preload" as="image" href="{{ macros::get_social_icon(icon=social.name) }}" />
   {% endfor %}
   <!---->
   {% endif %}
@@ -56,7 +102,7 @@
   {% endif %}
 
   <!-- Dark Icon -->
-  <link rel="preload" as="image" href="{{ get_url(path=`icons/` ~ `theme.svg`) }}" />
+  <link rel="preload" as="image" href="{{ get_url(path=`icons/theme.svg`) }}" />
 
   <!-- Math -->
   {% if page.extra.math | default(value=config.extra.math) %}
@@ -81,14 +127,14 @@
   <!-- Feeds -->
   {% if config.generate_feed %}
   <!---->
-  {% if config.feed_filename == "atom.xml" %}
+  {% if "atom.xml" in config.feed_filenames %}
   <link
     rel="alternate"
     type="application/atom+xml"
     title="Atom"
     href="{{ get_url(path=`atom.xml`) }}"
   />
-  {% elif config.feed_filename == "rss.xml" %}
+  {% endif %} {% if "rss.xml" in config.feed_filenames %}
   <link
     rel="alternate"
     type="application/rss+xml"
@@ -101,19 +147,4 @@
 
   <!-- Canonical -->
   <link rel="canonical" href="{{ page.permalink | default(value=get_url(path=``)) }}" />
-
-  <!-- MODIFIED -->
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="{{ config.title }}" />
-  <meta property="og:title" content="
-    {% if page.title %} {{ page.title }} - {{ config.title }}
-    {% elif section.title %} {{ section.title }} - {{ config.title }}
-    {% else %} {{ config.title }} {% endif %}" />
-  <meta property="og:url" content="{{ current_url | default(value='/') }}" />
-  <meta property="og:description" content="{{ page.description | default(value=config.description) }}" />
-  <meta property="og:image" content="{{ get_url(path='card.gif') }}" />
-  <meta property="og:image:width" content="1920" />
-  <meta property="og:image:height" content="1080" />
-  <meta property="og:image:alt" content="Spinning earth, 'dittrich.pro' text" />
 </head>

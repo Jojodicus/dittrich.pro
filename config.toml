@@ -21,12 +21,12 @@ theme = "kita"
 minify_html = true
 
 # When set to "true", a feed is automatically generated.
-generate_feed = true
+generate_feeds = true
 
 # The filename to use for the feed. Used as the template filename, too.
 # Defaults to "atom.xml", which has a built-in template that renders an Atom 1.0 feed.
 # There is also a built-in template "rss.xml" that renders an RSS 2.0 feed.
-feed_filename = "atom.xml"
+feed_filenames = ["atom.xml"]
 
 # The taxonomies to be rendered for the site and their configuration of the default languages
 # Example:
@@ -47,10 +47,8 @@ author = "Jojodicus"
 
 title = "dittrich.pro"
 description = "Meine Website für Blogs und andere nette Dinge!"
-minify_html = true
-generate_feed = true
+generate_feeds = true
 taxonomies = [{ name = "tags", rss = true, paginate_by = 5 }]
-author = "Jojodicus"
 
 [markdown]
 # Whether to do syntax highlighting

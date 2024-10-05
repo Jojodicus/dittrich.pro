@@ -5,7 +5,7 @@ description = "Lösung der PFP-Klausur vom Sommersemester 2021 im Rahmen der Taf
 [taxonomies]
 tags = ["pfp", "fau"]
 [extra]
-cover_image = "images/black-mountains.jpg"
+cover.image = "images/black-mountains.jpg"
 +++
 
 # Aufgabe 1 (Wissensfragen)

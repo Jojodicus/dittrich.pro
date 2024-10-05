@@ -5,7 +5,7 @@ description = "Things to do after installing Windows on a gaming PC. Some more, 
 [taxonomies]
 tags = ["pc", "software"]
 [extra]
-cover_image = "images/windows-glow.jpg"
+cover.image = "images/windows-glow.jpg"
 +++
 
 <!-- [Deutsche Version](@/setting-up-windows.de.md) -->
@@ -34,7 +34,7 @@ When checking your RAM speed with third-party programs, you will sometimes find 
 
 Normally, a CPU can only access the graphic card's VRAM in 256 MB blocks at a time. This can become a bottleneck when trying to upload multiple gigabytes worth of textures. With Resizable BAR, you can essentially make the visible block as large as the whole available VRAM, improving performance depending on the game.
 
-To enable it, make sure **CSM is disabled**. On brand new systems it should be, but just to be on the safe side. Then, **enable both Above 4G Decoding and Resizable BAR** (sometimes also called SAM). You will also have to enable support for it in the GPU driver, more on that in a [later section](#resizable-bar-1).
+To enable it, make sure **CSM is disabled**. On brand new systems it should be, but just to be on the safe side. Then, **enable both Above 4G Decoding and Resizable BAR** (sometimes also called SAM). You will also have to enable support for it in the GPU driver, more on that in a [later section](/#resizable-bar-1).
 
 ## ErP
 
@@ -66,11 +66,11 @@ Now that we're out of the UEFI, we can further focus on programs and settings wi
 
 ## Drivers
 
-The first stop will be drivers. Normally, an OS should manage these for us, with manual intervention only being necessary if something breaks or performs poorly. Most drivers are provided by Windows Update and are tested to be stable under almost all operating conditions. For this reason, Windows ships driver updates very conservatively, as mismatching versions can break programs in subtle and hard to notice ways, more on that [later](#driver-boosters).
+The first stop will be drivers. Normally, an OS should manage these for us, with manual intervention only being necessary if something breaks or performs poorly. Most drivers are provided by Windows Update and are tested to be stable under almost all operating conditions. For this reason, Windows ships driver updates very conservatively, as mismatching versions can break programs in subtle and hard to notice ways, more on that [later](/#driver-boosters).
 
 ### GPU
 
-Pretty much the only driver where we want to trade stability for the most up-to-date performance is the graphics driver. Even when going up a single driver version, performance in games can improve drastically. The specialized driver can also provide additional settings and features, such as [Variable Refresh Rate](#vrr) or [Latency Reduction](#latency-reduction), which we will cover shortly.
+Pretty much the only driver where we want to trade stability for the most up-to-date performance is the graphics driver. Even when going up a single driver version, performance in games can improve drastically. The specialized driver can also provide additional settings and features, such as [Variable Refresh Rate](/#vrr) or [Latency Reduction](/#latency-reduction), which we will cover shortly.
 
 The installation steps depend on your dedicated GPU:
 
@@ -112,7 +112,7 @@ To combine latency reduction with the elimination of tearing (see [VRR](#VRR)), 
 
 #### Resizable BAR
 
-As [previously mentioned](#resizable-bar), we have to enable this setting on the driver-level as well. So search for **Resizable Bar or SAM and enable it**.
+As [previously mentioned](/#resizable-bar), we have to enable this setting on the driver-level as well. So search for **Resizable Bar or SAM and enable it**.
 
 ### Chipset, Network, Audio, ...
 
@@ -140,7 +140,7 @@ Using HDR can sometimes interfere with VRR or <abbr title="Black Frame Insertion
 
 ## Autostart
 
-When trying to optimize Windows for performance, the main goal is reducing the number of running background processes. Some people even focus so much on this, they end up breaking their system completely for negligible gains, more on that [later](#things-you-should-not-do). Something you can and should do, however, is cleaning up your autostart from unneeded programs.
+When trying to optimize Windows for performance, the main goal is reducing the number of running background processes. Some people even focus so much on this, they end up breaking their system completely for negligible gains, more on that [later](/#things-you-should-not-do). Something you can and should do, however, is cleaning up your autostart from unneeded programs.
 
 To do so, open up Task Manager (which has the keybind <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd></kbd>) and go to the autostart tab. Sort by status and disable every program you don't need started automatically and running in the background. When in doubt about specific programs, leave them as is. Some notable things the average person can disable are: Teams, OneDrive and Spotify.
 
@@ -239,7 +239,7 @@ Messing with the startup services is also a pretty fast way to brick your system
 
 ## Driver Boosters
 
-As mentioned [above](#drivers), Windows already manages almost everything for us. Using tools that ruthlessly update every available driver can cause major incompatibilities with version mismatches or lead to degraded stability. You will likely also not see any performance improvement from newer drivers. The only exception is the graphics driver, which we've [already taken care of](#gpu).
+As mentioned [above](/#drivers), Windows already manages almost everything for us. Using tools that ruthlessly update every available driver can cause major incompatibilities with version mismatches or lead to degraded stability. You will likely also not see any performance improvement from newer drivers. The only exception is the graphics driver, which we've [already taken care of](/#gpu).
 
 ## Cleaners
 
@@ -274,7 +274,7 @@ Changing the Power Plan from the balanced default to high performance can actual
 
 ## Disabling Services
 
-This is closely related to disabling startup services in [MSConfig](#msconfig). These also play a vital part in the core functionality of Windows and can lead to major problems when messing with them. It's not worth risking stability and integrity, especially when you don't know exactly what you are doing.
+This is closely related to disabling startup services in [MSConfig](/#msconfig). These also play a vital part in the core functionality of Windows and can lead to major problems when messing with them. It's not worth risking stability and integrity, especially when you don't know exactly what you are doing.
 
 ## Tweakers
 

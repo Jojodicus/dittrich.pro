@@ -5,7 +5,7 @@ description = "Dinge die man nach einer Installation von Windows auf seinem Gami
 [taxonomies]
 tags = ["pc", "software"]
 [extra]
-cover_image = "images/windows-glow.jpg"
+cover.image = "images/windows-glow.jpg"
 +++
 
 [English version](@/setting-up-windows.md)

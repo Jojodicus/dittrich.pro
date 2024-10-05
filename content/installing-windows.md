@@ -5,7 +5,7 @@ description = "Step-by-step guide for installing a fresh copy of windows or repl
 [taxonomies]
 tags = ["pc", "software"]
 [extra]
-cover_image = "images/windows-bloom.jpg"
+cover.image = "images/windows-bloom.jpg"
 +++
 
 In the following guide, we will go over the steps needed to install Windows for the first time and for reinstalling an already existing installation. The images for the steps are shown in a <abbr title="Virtual Machine">VM</abbr>, but the installation procedure is exactly the same when installing for bare-metal hardware.
