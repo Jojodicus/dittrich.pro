@@ -74,8 +74,8 @@ Pretty much the only driver where we want to trade stability for the most up-to-
 
 The installation steps depend on your dedicated GPU:
 
-- NVIDIA: [nvidia.com/download](https://www.nvidia.com/download)
-- AMD: [amd.com/support](https://www.amd.com/support)
+- NVIDIA: [nvidia.com/download](https://www.nvidia.com/drivers)
+- AMD: [amd.com/support](https://www.amd.com/en/support/download/drivers.html)
 - Intel: [intel.com/.../drivers.html](https://www.intel.com/content/www/us/en/products/docs/discrete-gpus/arc/software/drivers.html)
 
 {% admonition(type="info", title="Info") %}
