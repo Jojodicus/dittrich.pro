@@ -107,7 +107,7 @@ Another part where you can sink hours into is trying to find the optimal setting
 The video above will go into a lot more details about how each of these technologies works, but for a one-stop-solution, **enabling NVIDIA Reflex or AMD Anti-Lag** is the easiest method for a near-perfect result.
 
 {% admonition(type="info", title="Info") %}
-To combine latency reduction with the elimination of tearing (see [VRR](#VRR)), it can be beneficial to set a fps-limit slightly below the monitor's refresh rate. So, with a 144 Hz monitor, games can be capped to ~142 Hz at the driver level. This will ensure that both latency reduction and VRR are operating together.
+To combine latency reduction with the elimination of tearing (see [VRR](#VRR)), it can be beneficial to set a fps-limit slightly below the monitor's refresh rate. So, with a 144 Hz monitor, games can be capped to ~142 Hz, preferrably within the game's engine, [RTSS](https://www.guru3d.com/page/rivatuner-rtss-homepage/) or at the driver level, in that order. This will ensure that both latency reduction and VRR are operating together.
 {% end %}
 
 #### Resizable BAR
