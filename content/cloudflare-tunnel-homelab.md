@@ -316,7 +316,7 @@ two.sysleave.de {
 To get your DNS API token, head to <https://dash.cloudflare.com/profile/api-tokens> and create a token for "Edit zone DNS".
 You will only need to change the rightmost field in "Zone Resources" to your domain:
 
-![DNS Token](/images/cloudflare-tunnel/tunnel-entry.png)
+![DNS Token](/images/cloudflare-tunnel/dns-token.png)
 
 Then, copy your token and paste it into your Caddyfile.
 To recap, this is our folder structure:
