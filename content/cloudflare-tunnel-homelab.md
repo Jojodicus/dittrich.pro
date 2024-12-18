@@ -54,10 +54,10 @@ mindmap
 Example network. The details aren't really relevant, but see how "iPhone 16 Pro" and "IdeaPad 5 Pro" have the same local IP.
 The subnets are essentially isolated and the two devices know nothing about each other.
 
-## Dual Stack and CGNAT
+## DS-Lite and CGNAT
 
 But even this has not been enough to free up the IPv4 address space, so <abbr title="Internet Service Provider">ISP</abbr>s have been doing something very crafty:
-Apply this ordeal again. A connection of this type is then called a Dual Stack or CGNAT (the difference between them won't really matter for our case).
+Apply this ordeal again. A connection of this type is then called a <abbr title="Dual Stack Lite">DS-Lite</abbr> or <abbr title="Carrier-Grade Network Address Translation">CGNAT</abbr> (the difference between them won't really matter for our case).
 Now, the ISP network (our WAN) is essentially just another LAN network to the outside world, with our gateways as the clients.
 So now, our gateways are essentially unreachable to the outside world.
 We would need to setup a port-forward on the ISPs gateway, which we don't have access to.
