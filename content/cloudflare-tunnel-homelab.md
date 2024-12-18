@@ -86,6 +86,14 @@ mindmap
 
 Example CGNAT network. Details again aren't relevant, but see how there is no way to reach a router from another ISPs network.
 
+{% admonition(type="info", title="Info") %}
+
+IPv6 allows clients within a LAN to have a globally unique IP.
+This makes port-forwarding and tunneling unnecessary, as clients can just be run as exposed hosts.
+But as the client will then run without the router's firewall and proper configuration isn't exactly trivial, we will again skip over IPv6.
+Maybe in a future blog post though...
+{% end %}
+
 # Getting Started
 
 > Yeah, enough boomer history talk, how do we actually get our homelab to the outside then?<br>
