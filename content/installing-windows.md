@@ -8,6 +8,10 @@ tags = ["pc", "software"]
 cover.image = "images/windows-bloom.jpg"
 +++
 
+{% admonition(type="warning", title="Warning") %}
+**Update 2025-06-25:** Some parts of this guide are outdated by now. For example, the UI for the installation has changed, as well as the original online bypass not working any more. You can still use this post as a general walkthrough, but keep this info in mind.
+{% end %}
+
 In the following guide, we will go over the steps needed to install Windows for the first time and for reinstalling an already existing installation. The images for the steps are shown in a <abbr title="Virtual Machine">VM</abbr>, but the installation procedure is exactly the same when installing for bare-metal hardware.
 
 # Backing up old Data
