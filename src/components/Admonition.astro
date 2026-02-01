@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  type:
+    | 'note'
+    | 'abstract'
+    | 'info'
+    | 'tip'
+    | 'success'
+    | 'question'
+    | 'warning'
+    | 'failure'
+    | 'danger'
+    | 'bug'
+    | 'example'
+    | 'quote';
+  title?: string;
+}
+
+const { type, title } = Astro.props;
+
+const icons: Record<string, string> = {
+  note: 'lucide:file-text',
+  abstract: 'lucide:list',
+  info: 'lucide:info',
+  tip: 'lucide:lightbulb',
+  success: 'lucide:check-circle',
+  question: 'lucide:help-circle',
+  warning: 'lucide:alert-triangle',
+  failure: 'lucide:x-circle',
+  danger: 'lucide:zap',
+  bug: 'lucide:bug',
+  example: 'lucide:book-open',
+  quote: 'lucide:quote',
+};
+
+const titles: Record<string, string> = {
+  note: 'Note',
+  abstract: 'Abstract',
+  info: 'Info',
+  tip: 'Tip',
+  success: 'Success',
+  question: 'Question',
+  warning: 'Warning',
+  failure: 'Failure',
+  danger: 'Danger',
+  bug: 'Bug',
+  example: 'Example',
+  quote: 'Quote',
+};
+
+const iconName = icons[type] || icons.note;
+const defaultTitle = titles[type] || type;
+const displayTitle = title || defaultTitle;
+---
+
+<div class={`admonition admonition-${type}`}>
+  <div class="admonition-header">
+    <Icon name={iconName} class="admonition-icon" />
+    <span class="admonition-title">{displayTitle}</span>
+  </div>
+  <div class="admonition-content">
+    <slot />
+  </div>
+</div>

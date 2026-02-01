@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BlogCard from './BlogCard.astro';
+import { calculateReadingTime } from '../utils/reading-time';
+import Button from './Button.astro';
+
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .sort(
+    (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+      b.data.date.valueOf() - a.data.date.valueOf()
+  )
+  .slice(0, 4);
+
+const getReadTime = (post: CollectionEntry<'blog'>): number => {
+  return post.data.readTime ?? calculateReadingTime(post.body);
+};
+---
+
+<section class="py-24">
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="mb-8 animate-on-scroll text-center">
+      <h2 class="text-3xl font-bold mb-2">Latest Blog Posts</h2>
+      <p class="text-dark-text-muted">
+        Thoughts on technology, development, and more
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {recentPosts.map((post: CollectionEntry<'blog'>) => (
+        <BlogCard title={post.data.title} description={post.data.description} date={post.data.date} readTime={getReadTime(post)} slug={post.slug} thumbnail={post.data.thumbnail} />
+      ))}
+    </div>
+
+    <div class="text-center">
+      <Button
+        href="/blog"
+        variant="secondary"
+        size="lg"
+        icon="lucide:arrow-right"
+        iconPosition="right"
+      >
+        View all posts
+      </Button>
+    </div>
+  </div>
+</section>

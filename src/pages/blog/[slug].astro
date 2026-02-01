@@ -1,0 +1,224 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { calculateReadingTime } from '../../utils/reading-time';
+import Admonition from '../../components/Admonition.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+
+const readTime = post.data.readTime ?? calculateReadingTime(post.body);
+---
+
+<Layout title={`${post.data.title} - dittrich.pro`}>
+  <article class="py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <div class="mb-8">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-dark-text-muted hover:text-neon-cyan transition-colors mb-6"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span>Back to Blog</span>
+        </a>
+
+        <h1
+          class="text-4xl md:text-5xl font-bold mb-4"
+          style={`view-transition-name: blog-title-${post.slug}`}
+        >
+          {post.data.title}
+        </h1>
+        <p
+          class="text-xl text-dark-text-muted mb-6"
+          style={`view-transition-name: blog-desc-${post.slug}`}
+        >
+          {post.data.description}
+        </p>
+
+        <div
+          class="flex items-center gap-4 text-sm text-dark-text-muted"
+          style={`view-transition-name: blog-meta-${post.slug}`}
+        >
+          <time datetime={post.data.date.toISOString()}
+            >{formatDate(post.data.date)}</time
+          >
+          <span>•</span>
+          <span>{readTime} min read</span>
+        </div>
+      </div>
+
+      {
+        headings && headings.length > 0 && (
+          <div class="mb-8 p-6 bg-dark-surface border border-dark-border rounded-lg">
+            <details class="toc-details">
+              <summary class="cursor-pointer font-semibold text-lg mb-2 flex items-center gap-2 text-neon-cyan hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.8)] transition-all select-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+                Table of Contents
+              </summary>
+              <div class="toc-container">
+                <div class="toc-list">
+                  <ul class="space-y-2 pt-2">
+                    {headings
+                      .filter((h) => h.depth <= 3)
+                      .map((heading) => (
+                        <li
+                          class={
+                            heading.depth === 1
+                              ? ''
+                              : heading.depth === 2
+                                ? 'ml-4'
+                                : 'ml-8'
+                          }
+                        >
+                          <a
+                            href={`#${heading.slug}`}
+                            class={`${heading.depth === 1 ? 'text-dark-text' : 'text-dark-text-muted'} ${heading.depth === 1 ? 'text-base' : heading.depth === 2 ? 'text-sm' : 'text-xs'} hover:text-neon-cyan hover:drop-shadow-[0_0_6px_rgba(0,247,255,0.6)] transition-all block py-1`}
+                          >
+                            {heading.text}
+                          </a>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </div>
+        )
+      }
+
+      <div class="prose prose-invert prose-lg max-w-none">
+        <Content components={{ Admonition }} />
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const codeBlocks = document.querySelectorAll('pre:not(.mermaid)');
+    codeBlocks.forEach((block) => {
+      const code = block.querySelector('code');
+      if (!code) return;
+
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+      copyButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        const codeText = code.textContent || '';
+        navigator.clipboard.writeText(codeText).then(() => {
+          const svgContent = copyButton.querySelector('svg')?.outerHTML || '';
+          copyButton.innerHTML = svgContent + ' Copied!';
+          setTimeout(() => {
+            copyButton.innerHTML = svgContent + ' Copy';
+          }, 2000);
+        });
+      });
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      wrapper.style.position = 'relative';
+
+      block.parentNode.insertBefore(wrapper, block);
+      wrapper.appendChild(block);
+      wrapper.appendChild(copyButton);
+    });
+
+    const footnoteBacklinks = document.querySelectorAll('.footnote-backref');
+    footnoteBacklinks.forEach((backlink) => {
+      backlink.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
+      backlink.style.display = 'inline-flex';
+      backlink.style.alignItems = 'center';
+      backlink.style.justifyContent = 'center';
+      backlink.style.width = '1.5em';
+      backlink.style.height = '1.5em';
+      backlink.style.border = '1px solid var(--color-dark-border)';
+      backlink.style.borderRadius = '0.25rem';
+      backlink.style.marginLeft = '0.25rem';
+      backlink.style.transition = 'all 0.2s';
+    });
+
+    const tocDetails = document.querySelector('.toc-details');
+    if (tocDetails) {
+      const summary = tocDetails.querySelector('summary');
+      const container = tocDetails.querySelector('.toc-container');
+      if (summary && container) {
+        summary.addEventListener('click', (e) => {
+          const isOpen = tocDetails.hasAttribute('open');
+          const svg = summary.querySelector('svg');
+
+          if (svg) {
+            svg.style.transition = 'transform 0.3s ease-out';
+          }
+
+          if (!isOpen) {
+            tocDetails.setAttribute('open', '');
+            container.style.transition = 'none';
+            container.style.height = '0px';
+            const height = container.scrollHeight;
+            container.style.transition = 'height 0.3s ease-out';
+            requestAnimationFrame(() => {
+              container.style.height = height + 'px';
+            });
+            if (svg) {
+              svg.style.transform = 'rotate(90deg)';
+            }
+          } else {
+            container.style.transition = 'height 0.3s ease-out';
+            container.style.height = '0px';
+            if (svg) {
+              svg.style.transform = 'rotate(0deg)';
+            }
+            setTimeout(() => {
+              tocDetails.removeAttribute('open');
+            }, 300);
+          }
+          e.preventDefault();
+        });
+      }
+    }
+  });
+</script>

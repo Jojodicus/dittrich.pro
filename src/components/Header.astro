@@ -1,0 +1,252 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-dark-border backdrop-blur-md bg-dark-bg/80 relative"
+>
+  <nav class="mx-auto max-w-7xl flex items-center justify-between px-4 py-4">
+    <a
+      id="home-link"
+      href="/"
+      class="flex items-center gap-2 font-mono text-xl text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+      style="view-transition-name: site-logo"
+    >
+      <Icon name="lucide:terminal" class="text-neon-cyan" />
+      <span>dittrich.pro</span>
+    </a>
+
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 text-dark-text-muted hover:text-dark-text transition-colors"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <svg
+        id="burger-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-6 h-6 transition-transform duration-300"
+      >
+        <line
+          x1="3"
+          y1="6"
+          x2="21"
+          y2="6"
+          class="transition-transform duration-300 origin-center"></line>
+        <line
+          x1="3"
+          y1="12"
+          x2="21"
+          y2="12"
+          class="transition-transform duration-300 origin-center"></line>
+        <line
+          x1="3"
+          y1="18"
+          x2="21"
+          y2="18"
+          class="transition-transform duration-300 origin-center"></line>
+      </svg>
+    </button>
+
+    <div
+      id="mobile-menu"
+      class="md:hidden absolute top-full left-0 right-0 bg-dark-bg/95 backdrop-blur-md border-b border-dark-border transition-all duration-300 ease-out opacity-0 invisible -translate-y-4"
+      data-open="false"
+    >
+      <div class="flex flex-col px-4 py-4 gap-4">
+        <a
+          href="/blog"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          >Blog</a
+        >
+        <a
+          id="mobile-projects-link"
+          href="/#projects"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          >Projects</a
+        >
+        <a
+          id="mobile-about-link"
+          href="/#about"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          >About</a
+        >
+      </div>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-dark-text-muted">
+      <a
+        href="/blog"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        >Blog</a
+      >
+      <a
+        id="projects-link"
+        href="/#projects"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        >Projects</a
+      >
+      <a
+        id="about-link"
+        href="/#about"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        >About</a
+      >
+    </div>
+  </nav>
+  <div
+    id="scroll-progress"
+    class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-violet transition-all duration-150"
+    style="width: 0%"
+  >
+  </div>
+</header>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    #mobile-menu,
+    #mobile-menu-btn,
+    #burger-icon,
+    #burger-icon line {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const progressElement = document.getElementById('scroll-progress');
+    if (progressElement) {
+      const updateProgress = () => {
+        const scrollTop = window.scrollY;
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressElement.style.width = `${Math.min(progress, 100)}%`;
+      };
+
+      window.addEventListener('scroll', updateProgress);
+      updateProgress();
+    }
+
+    const homeLink = document.getElementById('home-link');
+    const projectsLink = document.getElementById('projects-link');
+    const aboutLink = document.getElementById('about-link');
+
+    const handleSmoothScroll = (e: Event, targetId: string) => {
+      const isHomepage = window.location.pathname === '/';
+
+      if (isHomepage) {
+        e.preventDefault();
+        const target = document.querySelector(targetId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        } else if (targetId === '#') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    };
+
+    if (homeLink) {
+      homeLink.addEventListener('click', (e) => {
+        const isHomepage = window.location.pathname === '/';
+        if (isHomepage) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    if (projectsLink) {
+      projectsLink.addEventListener('click', (e) =>
+        handleSmoothScroll(e, '#projects')
+      );
+    }
+
+    if (aboutLink) {
+      aboutLink.addEventListener('click', (e) =>
+        handleSmoothScroll(e, '#about')
+      );
+    }
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const burgerIcon = document.getElementById('burger-icon');
+    const mobileProjectsLink = document.getElementById('mobile-projects-link');
+    const mobileAboutLink = document.getElementById('mobile-about-link');
+
+    if (mobileMenuBtn && mobileMenu && burgerIcon) {
+      const lines = burgerIcon.querySelectorAll('line');
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      const openMenu = () => {
+        mobileMenu.classList.remove('invisible', 'opacity-0', '-translate-y-4');
+        mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        mobileMenu.setAttribute('data-open', 'true');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        if (!prefersReducedMotion) {
+          lines[0].style.transform = 'rotate(45deg) translateY(6px)';
+          lines[1].style.opacity = '0';
+          lines[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+        }
+      };
+
+      const closeMenu = () => {
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        mobileMenu.classList.add('invisible', 'opacity-0', '-translate-y-4');
+        mobileMenu.setAttribute('data-open', 'false');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        if (!prefersReducedMotion) {
+          lines[0].style.transform = '';
+          lines[1].style.opacity = '1';
+          lines[2].style.transform = '';
+        }
+      };
+
+      const toggleMenu = () => {
+        const isOpen = mobileMenu.getAttribute('data-open') === 'true';
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      };
+
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleMenu();
+      });
+
+      if (mobileProjectsLink) {
+        mobileProjectsLink.addEventListener('click', (e) => {
+          handleSmoothScroll(e, '#projects');
+          closeMenu();
+        });
+      }
+
+      if (mobileAboutLink) {
+        mobileAboutLink.addEventListener('click', (e) => {
+          handleSmoothScroll(e, '#about');
+          closeMenu();
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        const target = e.target as Node;
+        if (!mobileMenu.contains(target) && !mobileMenuBtn.contains(target)) {
+          closeMenu();
+        }
+      });
+    }
+  });
+</script>

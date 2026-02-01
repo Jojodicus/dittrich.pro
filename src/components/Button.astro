@@ -1,0 +1,86 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  href?: string;
+  onClick?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: string;
+  iconPosition?: 'left' | 'right';
+  className?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  onClick,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconPosition = 'left',
+  className = '',
+  ...rest
+} = Astro.props;
+
+const variants = {
+  primary:
+    'bg-dark-surface border-dark-border hover:drop-shadow-[0_0_10px_rgba(0,247,255,0.6)]',
+  secondary:
+    'bg-dark-surface border-dark-border hover:drop-shadow-[0_0_10px_rgba(191,119,254,0.6)]',
+  ghost: 'border-transparent hover:bg-dark-surface/50',
+};
+
+const sizes = {
+  sm: 'px-3 py-1.5 text-sm gap-1.5 rounded-lg',
+  md: 'px-4 py-2 text-base gap-2 rounded-xl',
+  lg: 'px-5 py-2.5 text-lg gap-2.5 rounded-2xl',
+};
+
+const baseClasses = `inline-flex items-center justify-center rounded-2xl border transition-all duration-300 focus:outline-none ${variants[variant]} ${sizes[size]} ${className}`;
+
+const iconSize = {
+  sm: 'w-4 h-4',
+  md: 'w-5 h-5',
+  lg: 'w-5 h-5',
+};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={[
+        baseClasses,
+        icon && iconPosition === 'right' && 'flex-row-reverse',
+      ]}
+      {...rest}
+    >
+      {icon && <Icon name={icon} class:list={[iconSize[size]]} />}
+      <slot />
+    </a>
+  ) : onClick ? (
+    <button
+      onclick={onClick}
+      class:list={[
+        baseClasses,
+        icon && iconPosition === 'right' && 'flex-row-reverse',
+      ]}
+      {...rest}
+    >
+      {icon && <Icon name={icon} class:list={[iconSize[size]]} />}
+      <slot />
+    </button>
+  ) : (
+    <button
+      class:list={[
+        baseClasses,
+        icon && iconPosition === 'right' && 'flex-row-reverse',
+      ]}
+      {...rest}
+    >
+      {icon && <Icon name={icon} class:list={[iconSize[size]]} />}
+      <slot />
+    </button>
+  )
+}

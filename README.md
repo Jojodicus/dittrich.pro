@@ -1,31 +1,52 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c9f55710-9443-4276-a550-8a0eb204d363/deploy-status)](https://app.netlify.com/sites/dittrich-pro/deploys)
+# dittrich.pro
 
-# [dittrich.pro](https://dittrich.pro)
+Personal portfolio website built with Astro 5.
 
-My humble blog, built using [Zola](https://www.getzola.org/) with the [Kita](https://github.com/st1020/kita) theme, hosted on [Netlify](https://www.netlify.com/), with auto-deployment using [Hugo](https://gohugo.io/).
+## Tech Stack
 
-## Usage reference
+- **Framework**: Astro (static build)
+- **Styling**: Tailwind CSS
+- **Icons**: astro-icon (lucide, lineicons, cib)
+- **Content**: Astro content collections (blog, imprint)
+- **Integrations**: @astrojs/sitemap, mermaid, mdx
 
-Normal posts go into [content/](content/) as Markdown files with enhanced syntax, with any images being stored in [static/images/](static/images/). For a sample post using all available features, see [test-post.md](content/test-post.md).
+## Commands
 
-## Tags
+| Command | Action |
+| :------ | :----- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start dev server at localhost:4321 |
+| `npm run build` | Build production site to `dist/` |
+| `npm run preview` | Preview build locally |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Format code with Prettier |
+| `npm run format:check` | Check formatting |
 
-Posts are categorized by tags. The ones currently in use and/or planned are:
-
-- `general`: not fitting into any other category, or, well general content...
-- `pc`: normie stuff and guides about computers
-- `hardware`: everything related to hardware
-- `software`: same, but for software
-- `development`: software, but more nerdy
-- `fau`: things for university
-- `pfp`: for uni course "parallel & functional programming"
-
-## Local debugging
-
-To host the website locally for debugging purposes, run:
+## Project Structure
 
 ```
-zola serve
+src/
+├── components/      # Reusable Astro components
+├── layouts/         # Base layouts
+├── pages/           # File-based routing
+│   ├── index.astro  # Home page
+│   ├── blog/        # Blog pages
+│   └── imprint.astro
+├── content/         # Content collections
+├── data/            # Static data (projects, etc.)
+└── styles/          # Global styles
 ```
 
-Zola automatically refreshes when files are changed, so you don't have to restart the local server after every modification.
+## Development
+
+```bash
+npm run dev
+```
+
+## Deployment
+
+Build output is in `dist/`. Deploy to any static host (Netlify, Vercel, etc.).
+
+## License
+
+Code structure is MIT. All content (blog posts, text) is copyrighted to the respective authors. Third-party logos and images retain their respective ownership.

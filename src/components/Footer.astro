@@ -1,0 +1,57 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const emailBase64 = 'am9oYW5uZXNAZGl0dHJpY2gucHJv';
+---
+
+<footer class="border-t border-dark-border mt-20">
+  <div class="mx-auto max-w-7xl px-4 py-8 flex items-center justify-between">
+    <div class="text-dark-text-muted text-sm">
+      © <span id="current-year">Loading...</span> dittrich.pro
+      <span class="mx-2">•</span>
+      <a
+        href="/imprint"
+        class="hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.8)] transition-all"
+        style="view-transition-name: footer-imprint">Imprint</a
+      >
+    </div>
+
+    <div class="flex gap-4">
+      <a
+        href="https://github.com/jojodicus"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-dark-text-muted hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.8)] transition-all"
+        style="view-transition-name: footer-github"
+      >
+        <Icon name="lucide:github" class="w-5 h-5" />
+      </a>
+      <a
+        class="text-dark-text-muted hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.8)] transition-all"
+        id="email-link"
+        data-email={emailBase64}
+        style="view-transition-name: footer-email"
+      >
+        <Icon name="lucide:mail" class="w-5 h-5" />
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const emailLink = document.getElementById('email-link');
+    if (emailLink) {
+      const encodedEmail = emailLink.getAttribute('data-email');
+      if (encodedEmail) {
+        const email = atob(encodedEmail);
+        (emailLink as HTMLAnchorElement).href = `mailto:${email}`;
+      }
+    }
+
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) {
+      yearElement.textContent = new Date().getFullYear().toString();
+    }
+  });
+</script>

@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BlogCard from '../../components/BlogCard.astro';
+import { calculateReadingTime } from '../../utils/reading-time';
+import Button from '../../components/Button.astro';
+
+const POSTS_PER_PAGE = 5;
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const currentPage = 1;
+const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+const endIndex = startIndex + POSTS_PER_PAGE;
+const posts = sortedPosts.slice(startIndex, endIndex);
+
+const getReadTime = (post: CollectionEntry<'blog'>): number => {
+  return post.data.readTime ?? calculateReadingTime(post.body);
+};
+---
+
+<Layout title="Blog - dittrich.pro">
+  <section class="py-16">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold mb-2">Blog</h1>
+          <p class="text-dark-text-muted">
+            Thoughts on technology, development, and more
+          </p>
+        </div>
+        <Button href="/rss.xml" variant="primary" icon="lucide:rss">
+          RSS
+        </Button>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 mb-12">
+        {posts.map((post: CollectionEntry<'blog'>) => (
+          <BlogCard title={post.data.title} description={post.data.description} date={post.data.date} readTime={getReadTime(post)} slug={post.slug} thumbnail={post.data.thumbnail} />
+        ))}
+      </div>
+
+      {
+        totalPages > 1 && (
+          <div class="flex items-center justify-center gap-4">
+            {currentPage > 1 && (
+              <Button
+                variant="secondary"
+                href={`/blog/page/${currentPage - 1}`}
+              >
+                Previous
+              </Button>
+            )}
+            <span class="text-dark-text-muted">
+              Page {currentPage} of {totalPages}
+            </span>
+            {currentPage < totalPages && (
+              <Button href={`/blog/${currentPage + 1}`}>Next</Button>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>

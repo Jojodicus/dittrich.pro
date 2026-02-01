@@ -1,0 +1,155 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface TechItem {
+  name: string;
+  icon: string;
+  color: string;
+}
+
+const techStack: TechItem[] = [
+  { name: 'Kotlin', icon: 'cib:kotlin', color: '#7f52ff' },
+  { name: 'Python', icon: 'cib:python', color: '#3776ab' },
+  { name: 'Go', icon: 'cib:go', color: '#00add8' },
+  { name: 'C', icon: 'cib:c', color: '#a8b9cc' },
+  { name: 'C++', icon: 'cib:cplusplus', color: '#00599c' },
+  { name: 'CUDA', icon: 'cib:nvidia', color: '#76b900' },
+  { name: 'Docker', icon: 'cib:docker', color: '#2496ed' },
+  { name: 'Linux', icon: 'cib:linux', color: '#fcc624' },
+  { name: 'Git', icon: 'lucide:git-branch', color: '#f05032' },
+  { name: 'Embedded', icon: 'lucide:cpu', color: '#10b981' },
+  { name: 'HPC', icon: 'lucide:server', color: '#6366f1' },
+  { name: 'CI/CD', icon: 'lucide:github', color: '#2088ff' },
+];
+
+function getCarouselItems(items: TechItem[]): TechItem[] {
+  return [...items, ...items, ...items];
+}
+---
+
+<section class="py-24 overflow-hidden">
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="mb-8 animate-on-scroll">
+      <h2 class="text-3xl font-bold text-center mb-2">Tech Stack</h2>
+      <p class="text-dark-text-muted text-center">Technologies I work with</p>
+    </div>
+
+    <div
+      id="carousel-container"
+      class="relative overflow-hidden py-8 select-none cursor-grab active:cursor-grabbing"
+    >
+      <div
+        id="carousel-track"
+        class="flex gap-8 whitespace-nowrap will-change-transform"
+      >
+        {
+          getCarouselItems(techStack).map((tech) => {
+            return (
+              <div
+                class="tech-item flex-shrink-0 flex items-center gap-3 px-5 py-4 rounded-2xl bg-dark-surface border border-dark-border text-dark-text-muted transition-all duration-300 cursor-grab active:cursor-grabbing w-40"
+                style={`--glow-color: ${tech.color}`}
+              >
+                <Icon name={tech.icon} class="w-6 h-6" />
+                <span class="font-medium whitespace-nowrap">{tech.name}</span>
+              </div>
+            );
+          })
+        }
+      </div>
+
+      <div
+        class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-dark-bg to-transparent pointer-events-none z-10"
+      >
+      </div>
+      <div
+        class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-dark-bg to-transparent pointer-events-none z-10"
+      >
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tech-item:hover {
+    filter: drop-shadow(0 0 12px var(--glow-color, #fff));
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const container = document.getElementById('carousel-container');
+    const track = document.getElementById('carousel-track');
+    if (!container || !track) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const firstItem = track.querySelector('.tech-item') as HTMLElement;
+    if (!firstItem) return;
+
+    const itemWidth = firstItem.offsetWidth;
+    const gap = 32;
+    const BASE_ITEMS = 12;
+    const ITEM_WIDTH = itemWidth + gap;
+    const LOOP_WIDTH = BASE_ITEMS * ITEM_WIDTH;
+
+    let pos = -LOOP_WIDTH;
+    let velocity = 0;
+    let isDragging = false;
+
+    let lastX = 0;
+    let lastT = 0;
+
+    const AUTOPLAY_SPEED = -4;
+    const FRICTION = 0.96;
+    const RETURN_FORCE = 0.01;
+
+    const animate = () => {
+      if (!isDragging) {
+        velocity += (AUTOPLAY_SPEED - velocity) * RETURN_FORCE;
+        velocity *= FRICTION;
+        pos += velocity;
+      }
+
+      if (pos < -2 * LOOP_WIDTH) pos += LOOP_WIDTH;
+      if (pos > -LOOP_WIDTH) pos -= LOOP_WIDTH;
+
+      track.style.transform = `translateX(${pos}px)`;
+      requestAnimationFrame(animate);
+    };
+
+    container.addEventListener('pointerdown', (e: PointerEvent) => {
+      isDragging = true;
+      velocity = 0;
+      lastX = e.clientX;
+      lastT = performance.now();
+      container.setPointerCapture(e.pointerId);
+    });
+
+    container.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging) return;
+
+      const dx = e.clientX - lastX;
+      const now = performance.now();
+      const dt = now - lastT || 16;
+
+      pos += dx;
+      velocity = (dx / dt) * 16;
+
+      lastX = e.clientX;
+      lastT = now;
+    });
+
+    container.addEventListener('pointerup', () => {
+      isDragging = false;
+    });
+
+    container.addEventListener('pointercancel', () => {
+      isDragging = false;
+    });
+
+    requestAnimationFrame(animate);
+  });
+</script>

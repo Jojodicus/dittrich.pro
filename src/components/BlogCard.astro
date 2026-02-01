@@ -1,0 +1,86 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  readTime: number;
+  slug: string;
+  thumbnail?: string;
+}
+
+const { title, description, date, readTime, slug, thumbnail } = Astro.props;
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+---
+
+<article
+  class="group bg-dark-surface border border-dark-border rounded-3xl overflow-hidden transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(0,247,255,0.6)] animate-on-scroll"
+>
+  <a href={`/blog/${slug}`} class="block">
+    <div class="overflow-hidden">
+      {
+        thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={title}
+            class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div class="w-full h-64 bg-gradient-to-br from-dark-bg to-dark-surface flex items-center justify-center">
+            <span class="text-4xl">📝</span>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="p-6">
+      <div
+        class="flex items-center gap-3 text-xs text-dark-text-muted mb-3"
+        style={`view-transition-name: blog-meta-${slug}`}
+      >
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        <span>•</span>
+        <span>{readTime} min read</span>
+      </div>
+
+      <h3
+        class="text-xl font-semibold mb-2"
+        style={`view-transition-name: blog-title-${slug}`}
+      >
+        {title}
+      </h3>
+
+      <p
+        class="text-dark-text-muted mb-4 line-clamp-2"
+        style={`view-transition-name: blog-desc-${slug}`}
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-2 text-neon-cyan group-hover:translate-x-1 transition-transform"
+      >
+        <span class="font-medium">Read more</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"></path>
+        </svg>
+      </div>
+    </div>
+  </a>
+</article>

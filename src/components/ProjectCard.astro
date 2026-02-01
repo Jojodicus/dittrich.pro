@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { Project } from '../data/projects';
+import Button from './Button.astro';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article
+  class="bg-dark-surface border border-dark-border rounded-3xl p-6 transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(191,119,254,0.6)] group animate-on-scroll"
+>
+  <div class="flex items-start gap-4 mb-4">
+    <div
+      class="p-3 rounded-2xl bg-gradient-to-br from-neon-cyan/10 to-neon-violet/10 border border-dark-border"
+    >
+      <Icon
+        name={project.icon}
+        class="w-8 h-8 text-neon-cyan group-hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.8)] transition-all"
+      />
+    </div>
+    <div class="flex-1">
+      <h3 class="text-xl font-semibold mb-2">{project.name}</h3>
+      <p class="text-dark-text-muted text-sm">
+        {project.description}
+      </p>
+    </div>
+  </div>
+
+  <div class="flex gap-3 mt-4 project-buttons">
+    {
+      project.links.website && (
+        <Button
+          href={project.links.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="primary"
+          size="sm"
+          icon="lucide:globe"
+        >
+          Website
+        </Button>
+      )
+    }
+    {
+      project.links.github && (
+        <Button
+          href={project.links.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="secondary"
+          size="sm"
+          icon="lucide:github"
+        >
+          GitHub
+        </Button>
+      )
+    }
+    {
+      project.links.demo && (
+        <Button
+          href={project.links.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="primary"
+          size="sm"
+          icon="lucide:play"
+        >
+          Demo
+        </Button>
+      )
+    }
+    {
+      project.links.docker && (
+        <Button
+          href={project.links.docker}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="secondary"
+          size="sm"
+          icon="cib:docker"
+        >
+          Docker
+        </Button>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .project-buttons :global(a) {
+    transition: all 0.3s;
+  }
+  .project-buttons :global(a:hover) {
+    --tw-drop-shadow: drop-shadow(0 0 10px rgba(0, 247, 255, 0.6));
+    filter: var(--tw-drop-shadow);
+  }
+</style>

@@ -1,0 +1,54 @@
+<section id="about" class="py-24">
+  <div class="mx-auto max-w-7xl px-4">
+    <div
+      class="bg-dark-surface border border-dark-border rounded-2xl p-8 md:p-12 animate-on-scroll"
+    >
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <div class="flex-1 order-2 md:order-1">
+          <h2 class="text-3xl font-bold mb-8">About Me</h2>
+          <p class="text-dark-text-muted leading-relaxed mb-4">
+            I'm Johannes, a backend developer at <a
+              href={`https://croit.io?utm_source=${Astro.site?.hostname || 'dittrich.pro'}`}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center transition-all relative after:absolute after:inset-0 after:bg-gradient-to-r after:from-[rgb(106,74,158)] after:to-[rgb(244,124,88)] after:rounded-[calc(0.25rem-1px)] after:blur-md after:opacity-0 after:transition-opacity motion-reduce:after:opacity-100 motion-reduce:after:transition-none hover:after:opacity-100"
+              aria-label="croit"
+              ><img
+                src="/Croit_Logo_white.svg"
+                alt="croit"
+                class="h-5 w-auto min-w-[60px] align-middle relative z-10"
+              /></a
+            > working on scalable and maintainable storage orchestration. I build
+            systems that are meant to run reliably, be understandable later, and survive
+            real production constraints.
+          </p>
+          <p class="text-dark-text-muted leading-relaxed mb-4">
+            This site collects my work and notes around backend engineering,
+            HPC, low-level programming, embedded systems, virtualization, and
+            containerization. Some of it is writing, some of it is
+            documentation, some of it is experiments that turned out useful
+            enough to publish.
+          </p>
+          <p class="text-dark-text-muted leading-relaxed">
+            Most of this comes from hands-on work with production systems,
+            homelabs, and open source. I care about simple designs, clear
+            trade-offs, and explanations that don't hide complexity behind
+            buzzwords.
+          </p>
+        </div>
+
+        <div class="flex-shrink-0 relative order-1 md:order-2">
+          <div
+            class="w-32 h-32 rounded-full bg-gradient-to-br from-neon-cyan/20 to-neon-violet/20 border-2 border-neon-cyan/30 flex items-center justify-center overflow-hidden relative"
+          >
+            <img
+              src="/assets/avatar.jpg"
+              alt="Johannes Dittrich"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

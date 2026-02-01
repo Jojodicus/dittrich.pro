@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components';
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  fileName: string;
+  url: string;
+  className?: string;
+}
+
+const { fileName, url, className = '' } = Astro.props;
+
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KiB', 'MiB', 'GiB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+};
+
+let fileSize: string | null = null;
+
+try {
+  const filePath = path.join(process.cwd(), 'public', url);
+  if (fs.existsSync(filePath)) {
+    const stats = fs.statSync(filePath);
+    fileSize = formatFileSize(stats.size);
+  }
+} catch {
+  // File not found, leave size as null
+}
+---
+
+<a
+  href={url}
+  download={fileName}
+  class:list={[
+    'inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-dark-surface border border-dark-border hover:drop-shadow-[0_0_8px_rgba(0,247,255,0.6)] focus:outline-none transition-all duration-300 !no-underline',
+    className,
+  ]}
+>
+  <Icon name="lucide:download" class="w-4 h-4 text-neon-cyan" />
+  <span class="text-dark-text"
+    >{fileName}{fileSize ? ` (${fileSize})` : ''}</span
+  >
+</a>

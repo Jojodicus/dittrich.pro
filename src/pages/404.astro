@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+---
+
+<Layout title="404 - Page Not Found">
+  <section
+    class="relative min-h-[80vh] flex items-center justify-center overflow-hidden"
+  >
+    <div class="absolute inset-0 opacity-10">
+      <div
+        class="absolute inset-0"
+        style="background-image: linear-gradient(rgba(0, 247, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 247, 255, 0.3) 1px, transparent 1px); background-size: 50px 50px;"
+      >
+      </div>
+    </div>
+
+    <div class="relative z-10 text-center px-4 max-w-2xl">
+      <h1
+        class="text-8xl md:text-9xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-violet"
+      >
+        404
+      </h1>
+      <p class="text-2xl md:text-3xl text-dark-text-muted mb-4">
+        Oops! Page not found
+      </p>
+      <p class="text-dark-text-muted mb-8">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <Button href="/" variant="primary" size="lg" icon="lucide:home">
+        Back to Home
+      </Button>
+    </div>
+  </section>
+</Layout>
