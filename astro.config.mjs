@@ -29,11 +29,13 @@ export default defineConfig({
   integrations: [
     icon({
       include: {
-        lucide: ["*"],
-        cib: ["*"],
+        lucide: ['*'],
+        cib: ['*'],
       },
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => page !== 'https://dittrich.pro/imprint/',
+    }),
     mermaid({
       theme: 'dark',
       autoTheme: false,
@@ -42,6 +44,6 @@ export default defineConfig({
   ],
 
   redirects: {
-    '/atom.xml': '/rss.xml'
+    '/atom.xml': '/rss.xml',
   },
 });
