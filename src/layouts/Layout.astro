@@ -14,7 +14,6 @@ interface Props {
 const {
   title = 'dittrich.pro',
   description = 'Personal portfolio website of Johannes Dittrich - Developer, tinkerer, and occasional writer.',
-  image = '/avatar.jpg',
   noindex = false,
 } = Astro.props;
 const siteUrl = 'https://dittrich.pro';
@@ -37,13 +36,13 @@ const siteName = 'dittrich.pro';
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={siteUrl + Astro.url.pathname} />
-    <meta property="og:image" content={siteUrl + image} />
+    <meta property="og:image" content={siteUrl + "/avatar.jpg"} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dittrich_pro" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={siteUrl + image} />
+    <meta name="twitter:image" content={siteUrl + "/avatar.jpg"} />
   </head>
   <body
     class="min-h-screen flex flex-col bg-dark-bg text-dark-text antialiased"
