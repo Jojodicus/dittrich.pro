@@ -24,14 +24,16 @@ const formatDate = (date: Date) => {
 >
   <a href={`/blog/${slug}`} class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-3xl">
     <div class="overflow-hidden">
-      {
-        thumbnail ? (
-          <img
-            src={thumbnail}
-            alt={title}
-            class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
+        {
+          thumbnail ? (
+            <img
+              src={thumbnail}
+              alt={title}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
           <div class="w-full h-64 bg-gradient-to-br from-dark-bg to-dark-surface flex items-center justify-center">
             <span class="text-4xl">📝</span>
           </div>

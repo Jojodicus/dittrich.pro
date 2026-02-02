@@ -24,9 +24,15 @@ const formatDate = (date: Date) => {
 };
 
 const readTime = post.data.readTime ?? calculateReadingTime(post.body);
+
+const postImage = post.data.thumbnail || '/assets/avatar.jpg';
 ---
 
-<Layout title={`${post.data.title} - dittrich.pro`}>
+<Layout
+  title={`${post.data.title} - dittrich.pro`}
+  description={post.data.description}
+  image={postImage}
+>
   <article class="py-16">
     <div class="mx-auto max-w-4xl px-4">
       <div class="mb-8">
