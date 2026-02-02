@@ -11,7 +11,7 @@ Deutschland
 
 ## Kontakt
 
-E-Mail: johannes \[at\] dittrich.pro
+E-Mail: johannes<span> </span>\[at\]<span> </span>dittrich.pro
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 
