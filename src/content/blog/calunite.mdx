@@ -2,10 +2,13 @@
 title: 'Merging Calendars with CalUnite'
 description: 'Detailed guide for merging multiple calendars for sharing with friends and family.'
 date: 2025-12-29
-thumbnail: '/assets/blog/calunite/merged-calendars.png'
+thumbnail: '../../images/blog/calunite/merged-calendars.png'
 ---
 
 import Admonition from '../../components/Admonition.astro';
+import { Image } from 'astro:assets';
+import googleExport from '../../images/blog/calunite/google-export.png';
+import googleImport from '../../images/blog/calunite/google-import.png';
 
 # CalUnite
 
@@ -287,7 +290,7 @@ Everything is done in the [settings](https://calendar.google.com/calendar/u/0/r/
 - Scroll down to "Secret address in iCal format"
 - Click the copy button and confirm
 
-![Google Export](/assets/blog/calunite/google-export.png)
+<Image src={googleExport} alt="Google Export" />
 
 Or mark the calendar as public and copy the public link.
 Not recommended though.
@@ -297,7 +300,7 @@ Not recommended though.
 - Go to the [calendar subscription page (from URL)](https://calendar.google.com/calendar/u/0/r/settings/addbyurl)
 - Paste the link to the CalUnite calendar and hit "Add calendar"
 
-![Google Import](/assets/blog/calunite/google-import.png)
+<Image src={googleImport} alt="Google Import" />
 
 ### Apple
 

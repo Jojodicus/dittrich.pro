@@ -6,7 +6,7 @@ export function remarkCodeCopy() {
     visit(
       tree,
       'element',
-      (node: any, index: number | undefined, parent: any) => {
+      (node: any, _index: number | undefined, _parent: any) => {
         if (
           node.tagName === 'pre' &&
           node.children &&

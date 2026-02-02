@@ -2,12 +2,14 @@
 title: 'Test Post'
 description: 'Sample article, testing core markdown functionality.'
 date: 2023-12-27
-thumbnail: '/assets/blog/test-post/thumbnail.png'
+thumbnail: '../../images/blog/test-post/thumbnail.png'
 ---
 
 import YouTube from '../../components/YouTube.astro';
 import DownloadButton from '../../components/DownloadButton.astro';
 import Admonition from '../../components/Admonition.astro';
+import { Image } from 'astro:assets';
+import cardImage from '../../images/blog/test-post/card.png';
 
 This article offers a sample of basic Markdown syntax, it also shows whether basic HTML elements are decorated with CSS in the theme.
 
@@ -107,7 +109,7 @@ Tables aren't part of the core Markdown spec, but we support them.
 
 ## Images
 
-![alt text](/assets/blog/test-post/card.png)
+<Image src={cardImage} alt="Card image" />
 
 ![alt text](/assets/blog/test-post/card.gif)
 
@@ -119,7 +121,7 @@ H<sub>2</sub>O
 
 X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
 
-Press <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Delete</kbd> to end a session.
+Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Delete</kbd> to end a session.
 
 Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
 

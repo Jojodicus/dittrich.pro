@@ -2,10 +2,20 @@
 title: '(Re-)installing Windows'
 description: 'Step-by-step guide for installing a fresh copy of windows or replacing an existing one.'
 date: 2024-01-10
-thumbnail: '/assets/blog/installing-windows/windows-bloom.jpg'
+thumbnail: '../../images/blog/installing-windows/windows-bloom.jpg'
 ---
 
 import Admonition from '../../components/Admonition.astro';
+import { Image } from 'astro:assets';
+import setupLanguage from '../../images/blog/installing-windows/setup-language.png';
+import setupKey from '../../images/blog/installing-windows/setup-key.png';
+import setupVersion from '../../images/blog/installing-windows/setup-version.png';
+import setupDisksWritten from '../../images/blog/installing-windows/setup-disks-written.png';
+import setupDisksFree from '../../images/blog/installing-windows/setup-disks-free.png';
+import postSetupTelemetry from '../../images/blog/installing-windows/post-setup-telemetry.png';
+import postSetupMsAccount from '../../images/blog/installing-windows/post-setup-ms-account.png';
+import postSetupOops from '../../images/blog/installing-windows/post-setup-oops.png';
+import finishedInstall from '../../images/blog/installing-windows/finished-install.png';
 
 <Admonition type="warning" title="Warning">
   **Update 2025-06-25:** Some parts of this guide are outdated by now. For
@@ -136,13 +146,13 @@ The installation steps are pretty self-explanatory. For important settings and o
 
 ## Select Language
 
-![Choose language preferences](/assets/blog/installing-windows/setup-language.png)
+<Image src={setupLanguage} alt="Choose language preferences" />
 
 Here we can change the default language options. These are mostly necessary for the setup, as they can also be changed later within Windows itself. But choosing the preferred language now is of course recommended.
 
 ## Product Key
 
-![Providing a product key](/assets/blog/installing-windows/setup-key.png)
+<Image src={setupKey} alt="Providing a product key" />
 
 The setup will ask us for the product key of our license. This can be skipped for now. If you already had a valid license and are reinstalling, Windows will automatically activate it again when the installation is complete and has access to the internet. If your license is connected to your Microsoft account, logging into that later will also activate Windows. Digital single-PC licenses can be migrated from an old system later in the Activation Settings as well.
 
@@ -159,7 +169,7 @@ When going the illegal route, there is also the option of activation scripts lik
 
 ## Choose Version
 
-![Choose version](/assets/blog/installing-windows/setup-version.png)
+<Image src={setupVersion} alt="Choose version" />
 
 Here we choose our desired version. If you already have a license and want to use it, choose the version applicable to that.
 
@@ -179,11 +189,11 @@ After choosing a custom install, we will set up the required partitions. Or rath
 
 If the drive already had an installation of Windows on it before, it will look something like this:
 
-![Drive setup with previous installation](/assets/blog/installing-windows/setup-disks-written.png)
+<Image src={setupDisksWritten} alt="Drive setup with previous installation" />
 
 Delete every partition, now we have:
 
-![Drive selection](/assets/blog/installing-windows/setup-disks-free.png)
+<Image src={setupDisksFree} alt="Drive selection" />
 
 Click next while having the unallocated space selected.
 
@@ -193,55 +203,45 @@ The setup will then install Windows and reboot. During the restart countdown, yo
 
 Go through the installation, Windows will explain things along the way.
 
-![Telemetry options](/assets/blog/installing-windows/post-setup-telemetry.png)
+<Image src={postSetupTelemetry} alt="Telemetry options" />
 
 For the telemetry and optional software like OneDrive or Office, a good rule of thumb is to say no to everything. The opt-out button is sometimes really hidden.
 
 <Admonition type="tip" title="Tip">
   The Setup requires an active internet connection. Sometimes, network drivers
   are not provided by the installation medium, making this impossible. To bypass
-  this requirement, press{' '}
-  <kbd>
-    <kbd>Shift</kbd>+<kbd>F10</kbd>
-  </kbd>
-  . This will bring up a command line. Type in `OOBE\BYPASSNRO` (without
-  backticks) and hit <kbd>Enter</kbd>. The system will now reboot and can then
-  be installed without internet. After the installation, you can then manually
-  get the drivers from your mainboard's website via another system with internet
-  access. Download them onto a USB drive (the one used as an installation medium
-  will suffice) and install them on your new system, you should be able to
-  connect to the internet then.
+  this requirement, press <kbd>Shift</kbd> + <kbd>F10</kbd>. This will bring up
+  a command line. Type in `OOBE\BYPASSNRO` (without backticks) and hit{' '}
+  <kbd>Enter</kbd>. The system will now reboot and can then be installed without
+  internet. After the installation, you can then manually get the drivers from
+  your mainboard's website via another system with internet access. Download
+  them onto a USB drive (the one used as an installation medium will suffice)
+  and install them on your new system, you should be able to connect to the
+  internet then.
 </Admonition>
 
 The installer will ask you to log into your Microsoft account. If don't want to log in and use a local account, there is also a way to bypass this. For the E-Mail, type in `a@a.com`, then random letters for the password:
 
-![Requires Microsoft account](/assets/blog/installing-windows/post-setup-ms-account.png)
+<Image src={postSetupMsAccount} alt="Requires Microsoft account" />
 
-![Bypass account requirement](/assets/blog/installing-windows/post-setup-oops.png)
+<Image src={postSetupOops} alt="Bypass account requirement" />
 
 Now, after pressing next, you will be able to continue the installation without a Microsoft account.
 
 <Admonition type="info" title="Info">
   For some systems, this method does not work, with the setup again asking for
-  valid credentials. To bypass this, press{' '}
-  <kbd>
-    <kbd>Shift</kbd>+<kbd>F10</kbd>
-  </kbd>
-  , type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>, just
+  valid credentials. To bypass this, press <kbd>Shift</kbd> + <kbd>F10</kbd>,
+  type in `OOBE\BYPASSNRO` (without backticks) and hit <kbd>Enter</kbd>, just
   like one would do for a no-internet installation. After the system reboots,
-  bring up the terminal again with{' '}
-  <kbd>
-    <kbd>Shift</kbd>+<kbd>F10</kbd>
-  </kbd>{' '}
-  and type in `ipconfig /release`, then press <kbd>Enter</kbd>. This will
-  disable the internet for the setup, making a purely offline installation
-  possible, even with a LAN-cable plugged in. The setup will ask for a internet
-  connection anyways, simply skip it and let it continue without internet
-  access.
+  bring up the terminal again with <kbd>Shift</kbd> + <kbd>F10</kbd> and type in
+  `ipconfig /release`, then press <kbd>Enter</kbd>. This will disable the
+  internet for the setup, making a purely offline installation possible, even
+  with a LAN-cable plugged in. The setup will ask for a internet connection
+  anyways, simply skip it and let it continue without internet access.
 </Admonition>
 
 # Post Installation
 
-![finished](/assets/blog/installing-windows/finished-install.png)
+<Image src={finishedInstall} alt="finished" />
 
 You now have a fresh installation of Windows, ready to start customizing and installing games. For optimal performance, I recommend looking at [my other post](/blog/setting-up-windows). There, we will go over the optimal settings to ensure a trouble-free experience.

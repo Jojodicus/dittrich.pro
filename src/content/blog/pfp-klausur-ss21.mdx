@@ -2,10 +2,12 @@
 title: 'PFP Klausur SoSe 2021'
 description: 'Lösung der PFP-Klausur vom Sommersemester 2021 im Rahmen der Tafelübung.'
 date: 2024-02-06
-thumbnail: '/assets/blog/pfp-klausur-ss21/black-mountains.jpg'
+thumbnail: '../../images/blog/pfp-klausur-ss21/black-mountains.jpg'
 ---
 
 import DownloadButton from '../../components/DownloadButton.astro';
+import { Image } from 'astro:assets';
+import petriSs21 from '../../images/blog/pfp-klausur-ss21/petri-ss21.png';
 
 # Aufgabe 1 (Wissensfragen)
 
@@ -122,7 +124,7 @@ public class Mandelbrot {
 
 ## a)
 
-![Petri-Netz](/assets/blog/pfp-klausur-ss21/petri-ss21.png)
+<Image src={petriSs21} alt="Petri-Netz" />
 
 **b)** `[1, 1, 2, 4, 3]`
 

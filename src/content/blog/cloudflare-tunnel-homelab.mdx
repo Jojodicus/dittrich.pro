@@ -2,10 +2,17 @@
 title: 'Cloudflare Tunnel: Accessing your Homelab from Anywhere'
 description: 'For DS-Lite and CGNAT connections, no Port-Forwarding required.'
 date: 2024-12-17
-thumbnail: '/assets/blog/cloudflare-tunnel-homelab/orange-clouds.jpg'
+thumbnail: '../../images/blog/cloudflare-tunnel-homelab/orange-clouds.jpg'
 ---
 
 import Admonition from '../../components/Admonition.astro';
+import { Image } from 'astro:assets';
+import zeroTrust from '../../images/blog/cloudflare-tunnel-homelab/zero-trust.png';
+import tunnelDash from '../../images/blog/cloudflare-tunnel-homelab/tunnel-dash.png';
+import tunnelToken from '../../images/blog/cloudflare-tunnel-homelab/tunnel-token.png';
+import tunnelEntry from '../../images/blog/cloudflare-tunnel-homelab/tunnel-entry.png';
+import dnsToken from '../../images/blog/cloudflare-tunnel-homelab/dns-token.png';
+import adguardRewrite from '../../images/blog/cloudflare-tunnel-homelab/adguard-rewrite.png';
 
 # Intro
 
@@ -171,7 +178,7 @@ I will assume you already have your domain integrated into your Cloudflare dashb
 For the rest of this tutorial, I will use my domain `sysleave.de` as a placeholder, replace with your domain as needed.
 The next step will be adding the tunnel under Zero Trust (right sidepanel):
 
-![Zero Trust](/assets/blog/cloudflare-tunnel-homelab/zero-trust.png)
+<Image src={zeroTrust} alt="Zero Trust" />
 
 You might need to go through the initial setup step first.
 It will ask you to choose a plan and enter payment credentials.
@@ -180,13 +187,13 @@ We won't use any features that have metered billing, but for the future, keep in
 
 Then, within the "Networks" tab, create a tunnel:
 
-![Tunnel Creation](/assets/blog/cloudflare-tunnel-homelab/tunnel-dash.png)
+<Image src={tunnelDash} alt="Tunnel Creation" />
 
 Choose Cloudflared, then name the tunnel anything you like (you can change the name later).
 
 Press the right gray box to copy the command including your token:
 
-![Token](/assets/blog/cloudflare-tunnel-homelab/tunnel-token.png)
+<Image src={tunnelToken} alt="Token" />
 
 We will only be needing the token, so dump your clipboard contents to a temporary notepad.
 
@@ -219,7 +226,7 @@ After a `docker compose up -d`, you should see that our container has successful
 Now, we add our tunnel entries.
 With "Subdomain" and "Domain", you can customize the <abbr title="Fully Qualified Domain Name">FQDN</abbr> as well as a path (not used for most applications) where your service will be available. Such an entry may look like this:
 
-![Tunnel Entry](/assets/blog/cloudflare-tunnel-homelab/tunnel-entry.png)
+<Image src={tunnelEntry} alt="Tunnel Entry" />
 
 This will create a tunnel for [https://one.sysleave.de](https://one.sysleave.de) to the `service1` container, which serves its content via HTTP.
 We can use the container name here, as Docker conveniently configures its built-in DNS for that.
@@ -316,7 +323,7 @@ two.sysleave.de {
 To get your DNS API token, head to [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) and create a token for "Edit zone DNS".
 You will only need to change the rightmost field in "Zone Resources" to your domain:
 
-![DNS Token](/assets/blog/cloudflare-tunnel-homelab/dns-token.png)
+<Image src={dnsToken} alt="DNS Token" />
 
 Then, copy your token and paste it into your Caddyfile.
 To recap, this is our folder structure:
@@ -332,7 +339,7 @@ We are now ready to rebuild the Compose stack.
 Finally, to redirect local traffic to our Caddy reverse proxy, we use the oldest trick in the book: DNS rewrites.
 How to do this depends on your DNS, but I'll show the rewrite for AdGuard Home as an example, adapt for your own environment if necessary:
 
-![AdGuard Rewrite](/assets/blog/cloudflare-tunnel-homelab/adguard-rewrite.png)
+<Image src={adguardRewrite} alt="AdGuard Rewrite" />
 
 Of course, change the IP and domain to your setup.
 For convenience, I used a wildcard domain here to redirect all subdomains to Caddy.

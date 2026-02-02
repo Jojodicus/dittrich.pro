@@ -2,11 +2,15 @@
 title: 'Setting up a fresh Windows Installation'
 description: 'Things to do after installing Windows on a gaming PC. Some more, some less important...'
 date: 2023-12-28
-thumbnail: '/assets/blog/setting-up-windows/windows-glow.jpg'
+thumbnail: '../../images/blog/setting-up-windows/windows-glow.jpg'
 ---
 
 import Admonition from '../../components/Admonition.astro';
 import YouTube from '../../components/YouTube.astro';
+import { Image } from 'astro:assets';
+import fanCurve from '../../images/blog/setting-up-windows/fan-curve.png';
+import screenTearing from '../../images/blog/setting-up-windows/screen-tearing.jpg';
+import sdrHdr from '../../images/blog/setting-up-windows/sdr-hdr.webp';
 
 You've built your brand new gaming PC and installed Windows as your operating system. But now you want to actually use it for its intended purpose and set it up to your liking. In this guide, we will go over the most important settings for a smooth gaming experience. And consequently, about things you should ideally avoid.
 
@@ -49,7 +53,7 @@ Having tons of lights and making your PC light up like a christmas tree sure loo
 
 ## Fan Curve
 
-![An example fan curve](/assets/blog/setting-up-windows/fan-curve.png)
+<Image src={fanCurve} alt="An example fan curve" />
 
 Changing the fan speed is typically done in the UEFI as well. Deviating from the default settings can result in better thermal or acoustic performance, depending on the goal. For day-to-day activities, you probably want your system to operate as silently as possible, so dropping down your CPU cooler's RPM for low temperatures (&lt;50 °C) to almost inaudible levels is often a good idea. For case fans, I personally like to run them statically at the noise-floor as well.
 
@@ -89,7 +93,7 @@ The installation steps depend on your dedicated GPU:
 
 #### VRR
 
-![An example of heavy screen tearing](/assets/blog/setting-up-windows/screen-tearing.jpg)
+<Image src={screenTearing} alt="An example of heavy screen tearing" />
 
 You've probably heard of Variable Refresh Rate under the marketing names NVIDIA G-Sync, AMD FreeSync or the general term Adaptive Sync. Although the names are different, they essentially all do the same thing: sync your monitor's refresh rate to the game's frame rate. This has the advantage of eliminating screen tearing, while also keeping input latency down.
 
@@ -144,7 +148,7 @@ Especially when using monitors with high refresh rate, Windows sometimes fails t
 
 ### HDR
 
-![SDR vs HDR](/assets/blog/setting-up-windows/sdr-hdr.webp)
+<Image src={sdrHdr} alt="SDR vs HDR" />
 
 Some monitors have support for HDR, providing very bright highlights for content that supports it. With modern games doing so, you can often get a nice visual upgrade for no noticeable performance cost. To use it, you will again first have to **enable it within the <abbr title="On Screen Display">OSD</abbr>**. After that, the option should appear and work with supported games. For content on the normal desktop, Windows provides an option called Auto HDR. Turn it on and see if you like it, there is always the option of turning it off afterwards.
 
@@ -158,7 +162,7 @@ Some monitors have support for HDR, providing very bright highlights for content
 
 When trying to optimize Windows for performance, the main goal is reducing the number of running background processes. Some people even focus so much on this, they end up breaking their system completely for negligible gains, more on that [later](#things-you-should--do). Something you can and should do, however, is cleaning up your autostart from unneeded programs.
 
-To do so, open up Task Manager (which has the keybind <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd></kbd>) and go to the autostart tab. Sort by status and disable every program you don't need started automatically and running in the background. When in doubt about specific programs, leave them as is. Some notable things the average person can disable are: Teams, OneDrive and Spotify.
+To do so, open up Task Manager (which has the keybind <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>) and go to the autostart tab. Sort by status and disable every program you don't need started automatically and running in the background. When in doubt about specific programs, leave them as is. Some notable things the average person can disable are: Teams, OneDrive and Spotify.
 
 ## Game Mode
 

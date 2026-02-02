@@ -1,3 +1,8 @@
+---
+import { Image } from 'astro:assets';
+import avatarImage from '../images/avatar.jpg';
+---
+
 <section id="about" class="py-24">
   <div class="mx-auto max-w-7xl px-4">
     <div
@@ -42,10 +47,9 @@
           <div
             class="w-32 h-32 rounded-full bg-gradient-to-br from-neon-cyan/20 to-neon-violet/20 border-2 border-neon-cyan/30 flex items-center justify-center overflow-hidden relative"
           >
-          <img
-            src="/assets/avatar.jpg"
+          <Image
+            src={avatarImage}
             alt="Johannes Dittrich"
-            loading="lazy"
             class="w-full h-full object-cover rounded-full"
           />
           </div>
