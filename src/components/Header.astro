@@ -9,7 +9,7 @@ import { Icon } from 'astro-icon/components';
     <a
       id="home-link"
       href="/"
-      class="flex items-center gap-2 font-mono text-xl text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+      class="flex items-center gap-2 font-mono text-xl text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all focus-visible:outline-none focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
       style="view-transition-name: site-logo"
     >
       <Icon name="lucide:terminal" class="text-neon-cyan" />
@@ -18,7 +18,7 @@ import { Icon } from 'astro-icon/components';
 
     <button
       id="mobile-menu-btn"
-      class="md:hidden p-2 text-dark-text-muted hover:text-dark-text transition-colors"
+      class="md:hidden p-2 text-dark-text-muted hover:text-dark-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-lg"
       aria-label="Toggle menu"
       aria-expanded="false"
     >
@@ -64,19 +64,19 @@ import { Icon } from 'astro-icon/components';
       <div class="flex flex-col px-4 py-4 gap-4">
         <a
           href="/blog"
-          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2 focus-visible:outline-none focus-visible:text-dark-text focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
           >Blog</a
         >
         <a
           id="mobile-projects-link"
           href="/#projects"
-          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2 focus-visible:outline-none focus-visible:text-dark-text focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
           >Projects</a
         >
         <a
           id="mobile-about-link"
           href="/#about"
-          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2"
+          class="text-dark-text-muted hover:text-dark-text hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all py-2 focus-visible:outline-none focus-visible:text-dark-text focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
           >About</a
         >
       </div>
@@ -85,19 +85,19 @@ import { Icon } from 'astro-icon/components';
     <div class="hidden md:flex gap-6 text-dark-text-muted">
       <a
         href="/blog"
-        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all focus-visible:outline-none focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
         >Blog</a
       >
       <a
         id="projects-link"
         href="/#projects"
-        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all focus-visible:outline-none focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
         >Projects</a
       >
       <a
         id="about-link"
         href="/#about"
-        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all"
+        class="hover:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)] transition-all focus-visible:outline-none focus-visible:drop-shadow-[0_0_8px_rgba(191,119,254,0.8)]"
         >About</a
       >
     </div>

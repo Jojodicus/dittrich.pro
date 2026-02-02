@@ -181,6 +181,13 @@ body {
   box-shadow: 0 0 8px rgba(0, 247, 255, 0.4);
 }
 
+.prose .code-block-wrapper .copy-button:focus-visible {
+  outline: none;
+  border-color: var(--color-neon-cyan);
+  color: var(--color-neon-cyan);
+  box-shadow: 0 0 8px rgba(0, 247, 255, 0.4);
+}
+
 .prose pre code {
   background-color: transparent;
   padding: 0;

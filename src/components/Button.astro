@@ -37,7 +37,7 @@ const sizes = {
   lg: 'px-5 py-2.5 text-lg gap-2.5 rounded-2xl',
 };
 
-const baseClasses = `inline-flex items-center justify-center rounded-2xl border transition-all duration-300 focus:outline-none ${variants[variant]} ${sizes[size]} ${className}`;
+const baseClasses = `inline-flex items-center justify-center rounded-2xl border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 ${variants[variant]} ${sizes[size]} ${className}`;
 
 const iconSize = {
   sm: 'w-4 h-4',
