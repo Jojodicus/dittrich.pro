@@ -1,191 +1,40 @@
 # Agents Guide - dittrich.pro
 
-IMPORTANT: Update this file when something in the project changes.
+**IMPORTANT**: Update this file when project conventions change.
 
 ## Project Overview
 
-Personal portfolio website built with Astro 5, featuring a blog, project showcase, and tech stack carousel. The site uses modern CSS features (scroll-driven animations, color-mix) and follows a dark theme with neon accent colors.
+Personal portfolio website built with Astro 5, TypeScript, and Tailwind CSS. Features blog, project showcase, tech stack carousel, and view transitions.
 
 ## Tech Stack
 
-- **Framework**: Astro (static build)
-- **Styling**: Tailwind CSS with `@theme` directive
+- **Framework**: Astro 5 (static build)
+- **Styling**: Tailwind CSS v4
 - **Icons**: astro-icon (lucide, lineicons, cib)
-- **Content**: Astro content collections (blog, imprint)
-- **Integrations**: @astrojs/sitemap, mermaid, mdx
+- **Content**: Astro content collections
 - **Language**: TypeScript
 - **Linting**: ESLint + Prettier
-
-## Project Structure
-
-```
-src/
-├── components/        # Reusable Astro components
-│   ├── Header.astro
-│   ├── Footer.astro
-│   ├── Hero.astro
-│   ├── TechStack.astro
-│   ├── BlogPreview.astro
-│   ├── BlogCard.astro
-│   ├── FeaturedProjects.astro
-│   ├── ProjectCard.astro
-│   ├── About.astro
-│   ├── Button.astro      # Reusable button component
-│   ├── DownloadButton.astro
-│   ├── Admonition.astro
-│   └── YouTube.astro
-├── layouts/
-│   └── Layout.astro    # Base layout with ClientRouter
-├── pages/              # File-based routing
-│   ├── index.astro
-│   ├── blog/
-│   │   ├── index.astro
-│   │   ├── [slug].astro
-│   │   └── [page].astro
-│   ├── imprint.astro
-│   ├── 404.astro        # Custom 404 page
-│   └── rss.xml.js
-├── content/
-│   ├── config.ts
-│   ├── blog/           # Blog post MDX files
-│   └── imprint/
-│       └── imprint.md
-├── data/
-│   └── projects.ts
-├── styles/
-│   └── global.css
-└── utils/
-    ├── reading-time.ts
-    ├── remark-code-copy.ts
-    └── remark-extract-toc.ts
-```
 
 ## Development Commands
 
 ```bash
-npm run dev          # Start dev server
-npm run build        # Build for production
+npm run dev          # Start dev server at http://localhost:4321
+npm run build        # Build for production (outputs to dist/)
 npm run preview      # Preview production build
-npm run lint         # Run ESLint
+npm run lint         # Run ESLint on src
+npm run lint -- --fix # Auto-fix linting issues
 npm run format       # Format code with Prettier
-npm run format:check # Check formatting
+npm run format:check # Check formatting without modifying
 ```
 
-## View Transitions
+## Code Style Guidelines
 
-The site uses Astro's `<ClientRouter />` for view transitions. Elements with matching `view-transition-name` CSS properties will morph between pages:
+### TypeScript
 
-- **Blog posts**: Title, description, and metadata animate between list and detail pages
-- **Header/Footer**: Persistent across pages with smooth transitions
-- **Implementation**: Use `style="view-transition-name: unique-name"` on elements to enable morphing
+- Use strict TypeScript (extends `astro/tsconfigs/strict`)
+- Avoid `any` - ESLint warns but doesn't error
+- Use TypeScript interfaces for component props:
 
-## Key Conventions
-
-### Component Structure
-- Components use TypeScript interfaces for props
-- Client-side scripts are scoped within `<script>` tags in component files
-- Icons imported via `import { Icon } from "astro-icon/components"`
-
-### Color Theme
-- **Primary**: `--color-neon-cyan` (hsl(182, 100%, 50%))
-- **Secondary**: `--color-neon-violet` (hsl(270, 85%, 65%))
-- **Background**: `--color-dark-bg` (#0a0a0a - very dark gray)
-- **Surface**: `--color-dark-surface` (#121212)
-- **Border**: `--color-dark-border` (#1f1f1f)
-- **Text**: `--color-dark-text` (#e5e5e5 - light gray)
-- **Text muted**: `--color-dark-text-muted` (#a3a3a3)
-- **Text shadow**: Subtle shadow on body text `text-shadow: 0 0 1px rgba(255, 255, 255, 0.1)`
-- Tech stack carousel uses hex color codes directly in data array with CSS variables for hover glow (brand-specific colors for Kotlin, Python, Go, C, C++, CUDA, Docker, Linux, etc.)
-
-### CSS Features Used
-- **Scroll-driven animations**: `animation-timeline: view()` with `animation-range: entry 10% cover 40%`
-- **Scrollbar**: `scrollbar-gutter: stable` globally
-- **View transitions**: `<ClientRouter />` from `astro:transitions` (NOT deprecated `<ViewTransitions />`)
-- **Drop shadows**: Custom `drop-shadow` and `shadow` classes for hover glow effects
-
-### Layout Patterns
-- Sections use `py-16` vertical spacing
-- Content constrained to `max-w-7xl mx-auto px-4`
-- Horizontal dividers between landing page sections: `<div class="border-t border-dark-border"></div>`
-
-### Animation Classes
-- `.animate-on-scroll`: Slide-up animation (translateY 30px + fade) when elements enter viewport
-- `.animate-on-load`: Slide-up animation that triggers immediately on page load (for hero elements)
-- Both use `slide-up-scroll` keyframe animation with 0.6s duration and ease-out timing
-
-### Pagination Routes
-- Dynamic routes: `/blog/[page].astro` generates `/blog/1`, `/blog/2`, etc.
-- **IMPORTANT**: Pagination URLs are `/blog/{page}`, NOT `/blog/page/{page}`
-- First page is at `/blog/` (not `/blog/1`)
-
-## Content Collections
-
-### Blog Posts
-Located in `src/content/blog/*.mdx` with frontmatter:
-```yaml
----
-title: "Post Title"
-description: "Post description"
-date: 2026-01-15
-thumbnail: "/assets/blog/slug/image.jpg"
-readTime: 5
----
-```
-
-### Pagination Settings
-- Posts per page: 5
-- Sorted by: date (newest first)
-- Use `getCollection('blog')` to fetch posts
-
-## SEO & Metadata
-
-- **Sitemap**: Auto-generated by `@astrojs/sitemap` at `/sitemap-index.xml`
-- **RSS Feed**: At `/rss.xml`, redirect `/atom.xml` → `/rss.xml` via astro.config
-- **Site URL**: `https://dittrich.pro` (set in astro.config.mjs)
-- **Noindex**: Imprint page has `<meta name="robots" content="noindex">` via Layout prop
-
-## Known Issues & Solutions
-
-### Pagination 404
-**Issue**: Pagination URLs using `/blog/page/X` cause 404 errors
-**Solution**: Use `/blog/X` - the file `[page].astro` generates routes directly at that path
-**Example**: Page 2 is at `/blog/2`, not `/blog/page/2`
-
-### ClientRouter Migration
-**Issue**: Old code uses deprecated `<ViewTransitions />`
-**Solution**: Use `<ClientRouter />` from `'astro:transitions'` instead
-
-### View Transitions and JavaScript
-**Issue**: JavaScript doesn't re-run after navigation with view transitions
-**Solution**: Wrap all client-side JS in `astro:page-load` event listener instead of `DOMContentLoaded` or direct execution. This ensures email buttons, local time, and current year work after navigating between pages.
-
-### Burger Menu on Mobile
-**Issue**: Using astro-icon for burger menu causes issues with view transitions
-**Solution**: Use inline SVG burger icon with CSS transforms for X animation. Store menu state in `data-open` attribute and use CSS classes for visibility (not `hidden` class - use opacity/translate for animation).
-
-### Email Buttons
-Email buttons use base64-encoded emails for spam protection. They build actual `mailto:` links client-side. **Important**: When using the Button component for email, pass `href="#"` as a placeholder so it renders as `<a>`, then update the href in `astro:page-load`:
-```javascript
-document.addEventListener('astro:page-load', () => {
-  const emailLink = document.getElementById('email-link');
-  const email = atob(emailLink.getAttribute('data-email'));
-  (emailLink as HTMLAnchorElement).href = `mailto:${email}`;
-});
-```
-
-## Styling Guidelines
-
-1. **Use theme colors**: Reference `--color-neon-cyan`, `--color-neon-violet`, `--color-dark-*` variables
-2. **Avoid hardcoded colors**: Except tech stack carousel items (use hex codes directly in data array)
-3. **Use Tailwind**: All styling via utility classes
-4. **Scroll animations**: Add `.animate-on-scroll` to elements that should animate on entry
-5. **Responsive**: Use responsive prefixes (`md:`, `lg:`) as needed
-6. **Hover effects**: Use glowing shadows (`hover:shadow-neon-cyan/50`, `hover:drop-shadow`) instead of text color changes
-7. **Button component**: Use the reusable `Button.astro` component for consistent styling. Supports `href`, `variant` (primary/secondary/ghost), `size` (sm/md/lg), and `icon`. Size determines border-radius: sm→rounded-lg, md→rounded-xl, lg→rounded-2xl.
-
-## Component Prop Patterns
-
-### With TypeScript Interface
 ```astro
 ---
 interface Props {
@@ -196,98 +45,122 @@ const { title = 'default', noindex = false } = Astro.props;
 ---
 ```
 
-### For Blog Cards
-```astro
----
-interface Props {
-  title: string;
-  description: string;
-  date: Date;
-  readTime: number;
-  slug: string;
-  thumbnail?: string;
-}
----
+### Imports
+
+- Use absolute imports (configured in tsconfig)
+- Icons: `import { Icon } from 'astro-icon/components'`
+- Content collections: `import { getCollection } from 'astro:content'`
+
+### Naming Conventions
+
+- **Components**: PascalCase (e.g., `BlogCard.astro`)
+- **Variables/functions**: camelCase
+- **Constants**: SCREAMING_SNAKE_CASE for config objects
+- **CSS classes**: kebab-case
+
+### File Structure
+
+```
+src/
+├── components/   # Reusable Astro components
+├── layouts/      # Page layouts
+├── pages/        # File-based routing
+├── content/       # MDX content collections
+├── data/         # Static data (projects, etc.)
+├── styles/       # Global CSS
+└── utils/         # Utility functions
 ```
 
+### Astro Components
+
+- Props interface in frontmatter at top
+- Destructure `A.props` with defaults
+- Use `<script>` tags for client-side JS
+- **Important**: Wrap all client-side JS in `astro:page-load` event:
+
+```javascript
+document.addEventListener('astro:page-load', () => {
+  // Your client-side code here
+});
+```
+
+### Tailwind CSS
+
+- Use theme colors: `--color-neon-cyan`, `--color-neon-violet`, `--color-dark-*`
+- Avoid hardcoded colors (except tech stack carousel items)
+- Section spacing: `py-16`
+- Content width: `max-w-7xl mx-auto px-4`
+
+### View Transitions
+
+- Use `<ClientRouter />` from `astro:transitions` (NOT deprecated `<ViewTransitions />`)
+- Enable morphing with `style="view-transition-name: unique-name"`
+
 ### Button Component
-The reusable Button component should be used for all button-like elements:
+
+Use the reusable `Button.astro` component:
+
 ```astro
----
-import Button from '../components/Button.astro';
----
-<Button href="/blog" variant="primary" size="lg" icon="lucide:arrow-right" iconPosition="right">
+<Button
+  href="/blog"
+  variant="primary"
+  size="lg"
+  icon="lucide:arrow-right"
+  iconPosition="right"
+>
   View all posts
 </Button>
 ```
-- `href`: Link URL (renders as `<a>`)
+
 - `variant`: 'primary' | 'secondary' | 'ghost'
-- `size`: 'sm' | 'md' | 'lg' (determines roundedness: sm→rounded-lg, md→rounded-xl, lg→rounded-2xl)
-- `icon`: Icon name (e.g., 'lucide:github')
-- `iconPosition`: 'left' | 'right'
+- `size`: 'sm' | 'md' | 'lg' (determines roundedness)
 
-## Build Output
+### Content Collections (Blog)
 
-- **Output directory**: `dist/`
-- **Build type**: Static (no SSR)
-- **Adapter**: None (static deployment to Netlify/Vercel etc.)
-- **Post-build**: Run `npm run build` to generate `dist/`
+```yaml
+---
+title: 'Post Title'
+description: 'Post description'
+date: 2026-01-15
+thumbnail: '/assets/blog/slug/image.jpg'
+readTime: 5
+---
+```
+
+## Formatting (Prettier)
+
+- Semicolons: yes
+- Quotes: single
+- Tab width: 2
+- Trailing commas: es5
+
+## Linting (ESLint)
+
+- Extends: JS recommended, TypeScript recommended, Astro recommended
+- `no-unused-vars`: warn
+- `no-explicit-any`: warn
+
+## Common Patterns
+
+### Mobile Menu
+
+- Use inline SVG burger icon (not astro-icon)
+- Store state in `data-open` attribute
+- Use CSS classes for visibility (opacity/translate, NOT `hidden`)
+
+### Email Links
+
+- Base64-encode email addresses
+- Build `mailto:` link in `astro:page-load` event
+
+### Pagination Routes
+
+- Pages are at `/blog/1`, `/blog/2` (NOT `/blog/page/1`)
 
 ## Testing Changes
 
-1. Run `npm run build` to verify no errors
-2. Run `npm run preview` to test locally
-3. Run `npm run lint` to check for linting issues
-4. Run `npm run format:check` to verify formatting
-5. Check generated files in `dist/`
-6. Verify pagination works by navigating through blog pages
-7. Test view transitions between pages (check email buttons, local time, current year work after navigation)
-8. Check scroll animations by scrolling through page
-9. Test 404 page by visiting non-existent routes
-
-## Special Features
-
-### Tech Stack Carousel
-- JavaScript-based marquee animation (not CSS keyframes)
-- Content triplicated for seamless looping (3x)
-- Pointer events with `setPointerCapture` for reliable drag on both mouse and touch
-- Drag/throw support: grab and throw items, momentum physics on release
-- Auto-scroll resumes after user interaction
-- Uses CSS variables for hover glow: `style="--glow-color: #color"` on each item
-- Each item has `cursor-grab active:cursor-grabbing` for visual feedback
-- Respects `prefers-reduced-motion` (disables animation entirely)
-- Container width: `max-w-7xl` with `overflow-hidden`
-- Gradient fade overlays on left and right edges
-- Icons from lucide and cib (coreUI) icon sets
-
-### Reading Progress Bar
-- Navbar has progress bar at bottom: `<div id="scroll-progress">`
-- Updates via client-side JS on scroll event
-- Gradient from cyan to violet
-
-### Footer Year
-- Year rendered client-side via JavaScript in `astro:page-load` event listener
-- `document.getElementById('current-year').textContent = new Date().getFullYear().toString()`
-
-### Custom 404 Page
-- Located at `src/pages/404.astro`
-- Matches site theme with dark background and neon accents
-- Displays large "404" with gradient text and link back to home
-
-### Project Cards
-- Support for website, GitHub, demo, and Docker Hub links
-- Docker link uses `cib:docker` icon
-- Buttons have cyan hover glow for project cards (purple for other usages)
-
-### View Transition Names
-The following elements have view-transition-name set for morphing:
-- **Header**: Site logo (`site-logo`)
-- **Footer**: Imprint link, GitHub icon, email icon
-- **Blog**: Title, description, metadata (date + read time)
-
-## Deployment Notes
-
-- **Netlify**: Configure deployment platform to serve from `dist/` directory - `netlify.toml` exists with proper build settings
-- Ensure `atom.xml` redirect works (configured in astro.config)
-- No build scripts needed (static build)
-- Sitemap auto-generated at build time
+1. `npm run build` - Verify no build errors
+2. `npm run lint` - Check linting
+3. `npm run format:check` - Verify formatting
+4. `npm run preview` - Test locally
+5. Check view transitions, scroll animations, 404 page

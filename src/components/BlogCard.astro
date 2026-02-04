@@ -22,10 +22,10 @@ const formatDate = (date: Date) => {
 ---
 
 <article
-  class="group bg-dark-surface border border-dark-border rounded-3xl overflow-hidden transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(0,247,255,0.6)] animate-on-scroll"
+  class="group bg-dark-surface border border-dark-border rounded-3xl overflow-hidden transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(0,247,255,0.6)] animate-on-scroll h-full"
 >
-  <a href={`/blog/${slug}`} class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-3xl">
-      <div class="overflow-hidden">
+  <a href={`/blog/${slug}`} class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-3xl flex flex-col h-full">
+      <div class="overflow-hidden flex-none">
           {
             thumbnail ? (
               <Image
@@ -41,7 +41,7 @@ const formatDate = (date: Date) => {
         }
       </div>
 
-    <div class="p-6">
+    <div class="p-6 flex flex-col flex-1">
       <div
         class="flex items-center gap-3 text-xs text-dark-text-muted mb-3"
         style={`view-transition-name: blog-meta-${slug}`}
@@ -65,23 +65,25 @@ const formatDate = (date: Date) => {
         {description}
       </p>
 
-      <div
-        class="flex items-center gap-2 text-neon-cyan group-hover:translate-x-1 transition-transform"
-      >
-        <span class="font-medium">Read more</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+      <div class="mt-auto">
+        <div
+          class="flex items-center gap-2 text-neon-cyan group-hover:translate-x-1 transition-transform"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"></path>
-        </svg>
+          <span class="font-medium">Read more</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
       </div>
     </div>
   </a>
