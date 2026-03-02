@@ -104,14 +104,53 @@ import { Icon } from 'astro-icon/components';
   </nav>
   <div
     id="scroll-progress"
-    class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-violet transition-all duration-150"
+    class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-violet transition-all duration-150 relative"
     style="width: 0%"
   >
   </div>
 </header>
 
 <style>
+  #scroll-progress {
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--color-neon-cyan) 62%, transparent),
+      0 0 14px color-mix(in srgb, var(--color-neon-violet) 48%, transparent);
+    animation: scroll-progress-glow 2.4s ease-in-out infinite;
+  }
+
+  #scroll-progress::after {
+    content: '';
+    position: absolute;
+    inset: -1px 0;
+    border-radius: inherit;
+    background: inherit;
+    filter: blur(5px);
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  @keyframes scroll-progress-glow {
+    0%,
+    100% {
+      opacity: 0.88;
+      box-shadow:
+        0 0 7px color-mix(in srgb, var(--color-neon-cyan) 58%, transparent),
+        0 0 12px color-mix(in srgb, var(--color-neon-violet) 44%, transparent);
+    }
+
+    50% {
+      opacity: 0.96;
+      box-shadow:
+        0 0 11px color-mix(in srgb, var(--color-neon-cyan) 70%, transparent),
+        0 0 18px color-mix(in srgb, var(--color-neon-violet) 55%, transparent);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    #scroll-progress {
+      animation: none;
+    }
+
     #mobile-menu,
     #mobile-menu-btn,
     #burger-icon,
