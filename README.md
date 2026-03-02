@@ -1,4 +1,4 @@
-# dittrich.pro
+# [dittrich.pro](https://dittrich.pro)
 
 Personal portfolio website built with Astro 5.
 
