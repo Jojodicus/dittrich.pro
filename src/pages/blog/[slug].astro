@@ -142,24 +142,38 @@ const postImage = post.data.thumbnail || '/assets/avatar.jpg';
 
 <script>
   document.addEventListener('astro:page-load', () => {
+    const copyIcon =
+      '<svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+    const checkIcon =
+      '<svg class="icon-check" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
+
     const codeBlocks = document.querySelectorAll('pre:not(.mermaid)');
     codeBlocks.forEach((block) => {
       const code = block.querySelector('code');
       if (!code) return;
 
+      if (block.closest('.code-block-wrapper')) return;
+
       const copyButton = document.createElement('button');
+      copyButton.type = 'button';
       copyButton.className = 'copy-button';
-      copyButton.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+      copyButton.setAttribute('aria-label', 'Copy code');
+      copyButton.innerHTML = `${copyIcon}${checkIcon}`;
+
+      let resetCopyStateTimeout: ReturnType<typeof setTimeout> | undefined;
+
       copyButton.addEventListener('click', (event) => {
         event.preventDefault();
         const codeText = code.textContent || '';
+
         navigator.clipboard.writeText(codeText).then(() => {
-          const svgContent = copyButton.querySelector('svg')?.outerHTML || '';
-          copyButton.innerHTML = svgContent + ' Copied!';
-          setTimeout(() => {
-            copyButton.innerHTML = svgContent + ' Copy';
-          }, 2000);
+          copyButton.dataset.copied = 'true';
+          if (resetCopyStateTimeout) {
+            clearTimeout(resetCopyStateTimeout);
+          }
+          resetCopyStateTimeout = setTimeout(() => {
+            copyButton.dataset.copied = 'false';
+          }, 1800);
         });
       });
 
@@ -167,7 +181,9 @@ const postImage = post.data.thumbnail || '/assets/avatar.jpg';
       wrapper.className = 'code-block-wrapper';
       wrapper.style.position = 'relative';
 
-      block.parentNode.insertBefore(wrapper, block);
+      const parent = block.parentNode;
+      if (!parent) return;
+      parent.insertBefore(wrapper, block);
       wrapper.appendChild(block);
       wrapper.appendChild(copyButton);
     });

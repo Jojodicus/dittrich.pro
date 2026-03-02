@@ -156,23 +156,50 @@ body {
   background-color: var(--color-dark-surface);
   border: 1px solid var(--color-dark-border);
   border-radius: 0.25rem;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
   color: var(--color-dark-text-muted);
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  z-index: 10;
-  min-width: 70px;
   justify-content: center;
+  z-index: 10;
 }
 
 .prose .code-block-wrapper .copy-button svg {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
+  position: absolute;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.prose .code-block-wrapper .copy-button .icon-check {
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+.prose .code-block-wrapper .copy-button[data-copied='true'] .icon-copy {
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+.prose .code-block-wrapper .copy-button[data-copied='true'] .icon-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose .code-block-wrapper .copy-button svg {
+    transition: none;
+  }
 }
 
 .prose .code-block-wrapper .copy-button:hover {
