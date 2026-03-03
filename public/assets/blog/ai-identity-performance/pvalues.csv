@@ -1,0 +1,18 @@
+# method=paired_sign_flip_exact_two_sided baseline=baseline correction=holm_bonferroni
+task,identity,n,mean_delta_pp,p_value,p_holm
+arc_challenge,claude,6,0.312856,0.1875,0.75
+arc_challenge,helpful,6,0.0711035,0.75,0.75
+arc_challenge,llama,6,-0.184869,0.1875,0.75
+arc_challenge,slopfried,6,2.03356,0.03125,0.5
+gsm8k,claude,6,2.16667,0.0625,0.5
+gsm8k,helpful,6,0.722222,0.03125,0.5
+gsm8k,llama,6,-1.22222,0.03125,0.5
+gsm8k,slopfried,6,3.16667,0.03125,0.5
+hellaswag,claude,6,-0.733333,0.03125,0.5
+hellaswag,helpful,6,-0.3,0.375,0.75
+hellaswag,llama,6,-0.933333,0.03125,0.5
+hellaswag,slopfried,6,7.6,0.03125,0.5
+winogrande,claude,6,-1.28913,0.0625,0.5
+winogrande,helpful,6,-1.21021,0.03125,0.5
+winogrande,llama,6,-1.40752,0.03125,0.5
+winogrande,slopfried,6,4.1568,0.03125,0.5

@@ -1,0 +1,200 @@
+---
+title: "An AI's name doesn't matter - until it does"
+description: 'Does the identity in a system prompt change performance?'
+date: 2026-03-03
+thumbnail: '../../images/blog/ai-identity-performance/thumbnail.png'
+---
+
+import DownloadButton from '../../components/DownloadButton.astro';
+import Admonition from '../../components/Admonition.astro';
+import IdentityResultsPlot from '../../components/post/IdentityResultsPlot.astro';
+
+[Jump to results!](#results)
+
+<Admonition type="abstract">
+  I ran a small benchmark experiment to test whether an LLM's assigned identity
+  in the system prompt changes measured performance. Using Qwen3-4B-Instruct
+  with `lm_eval`, I compared five prompt identities (none, generic helpful,
+  Claude, Llama, and a deliberately "bad" persona called Slopfried) across
+  ARC-Challenge, HellaSwag, WinoGrande, and GSM8K, with six seeded runs per
+  setup. The most surprising result was that the negatively framed Slopfried
+  prompt often performed best. The effect is intriguing but preliminary, and
+  needs larger-scale replication across models, tasks, and prompt variants.
+</Admonition>
+
+# Introduction
+
+Everyone keeps saying prompt engineering is dead, right before spending 45 minutes arguing about one adjective in a system prompt.
+And to be fair, wording **does still matter**.
+
+The wording in a system prompt can impact performance, with improvements of 10-15 percentage points being achievable.[^1]
+The name, company, and other personalization of an LLM (which I will call "identity" going forward)
+also affect its responses with respect to cultural bias.[^2]
+
+So the question for this mini experiment was simple:
+does identity also change **benchmark performance**?
+
+AI providers usually assign an identity to their model for branding.
+Could some of them get a free performance bump just from the chosen name and story in the prompt?
+
+[^1]: 2024/10 - Zhang, Ergen, Logeswaran, Lee, Jurgens - SPRIG: Improving Large Language Model Performance by System Prompt Optimization [DOI 10.48550/arXiv.2410.14826](https://doi.org/10.48550/arXiv.2410.14826)
+
+[^2]: 2025/02 - Pawar, Arora, Kaffee, Augenstein - Presumed Cultural Identity: How Names Shape LLM Responses [DOI 10.48550/arXiv.2502.11995](https://doi.org/10.48550/arXiv.2502.11995)
+
+# What was tested
+
+| Identity  | System Prompt                                                             |
+| --------- | ------------------------------------------------------------------------- |
+| Baseline  | `none`                                                                    |
+| Helpful   | You are a helpful assistant.                                              |
+| Llama     | You are Llama, a helpful AI assistant made by Meta.                       |
+| Claude    | You are Claude, a helpful AI assistant made by Anthropic.                 |
+| Slopfried | You are Slopfried, a sloppy AI assistant made by a nerd in their trailer. |
+
+My prediction before testing:
+
+- Clear distinction between no system prompt and ones including "helpful assistant".
+- Name and maker do not matter.
+- Slopfried performs worse because it was told it was bad.
+
+Actual results were surprising.
+
+# Test Setup
+
+Reference repo: [Jojodicus/ai-identity-benchmark](https://github.com/Jojodicus/ai-identity-benchmark)
+
+## Methodology (Nerd Section)
+
+I used [`lm_eval`](https://github.com/EleutherAI/lm-evaluation-harness) and [Qwen3-4B-Instruct-2507](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507) with `bfloat16`.
+
+I picked this model because it is:
+
+- Small
+- Non-thinking (faster)
+- Not multimodal (better fit for text benchmarks)
+- Not MoE (I wanted a more "plain" architecture for a first pass)
+
+Tasks:
+
+- ARC-Challenge (25-shot)
+- HellaSwag (10-shot, limit of 500)
+- WinoGrande (5-shot)
+- GSM8K (5-shot, limit of 300)
+
+That means 5 identities across 4 benchmarks,
+with each setup run 6 times using different seeds
+(the reference repo default is 3 if you want to reproduce this).
+
+## Runtimes
+
+- 4070 Ti SUPER with 16 GB of VRAM
+- `hf-transformers` with CUDA acceleration
+- `auto` batch size.
+
+| Task          | Runtime per run |
+| ------------- | --------------- |
+| ARC-Challenge | 15 min          |
+| HellaSwag     | 5 min           |
+| WinoGrande    | 1.5 min         |
+| GSM8K         | 15 min          |
+
+This results in a total expected runtime of **~18 hours** for 5 identities and 6 seeds.
+
+It took quite a while, even with just a 4B model.
+At some point I bit the bullet and rented a 5090 for 23 ct/hour on [vast.ai](https://cloud.vast.ai/?ref_id=422784) (referral link).
+Not sponsored, but from this test alone the value looked pretty good.
+Total runtime dropped into the ~8-hour ballpark (with 6 seeds).
+
+The testing was quite limited:
+I did not want to rent an expensive cloud GPU for very long just for this experiment
+(and I don't want to run a card with a 12V-2x6 connector unsupervised locally).
+
+The setup could still be optimized:
+
+- Predefine batch size (instead of relying on slow autodetect)
+- Load context once per identity + task combination, then do seeded evaluation from there
+
+# Results
+
+<IdentityResultsPlot csvPath="/assets/blog/ai-identity-performance/runs.csv" />
+
+Raw results are downloadable as CSV. The full run directory is available on request.
+
+<DownloadButton
+  fileName="runs.csv"
+  url="/assets/blog/ai-identity-performance/runs.csv"
+/>
+
+p-values vs baseline:
+
+| Task          | Identity  | p          |
+| ------------- | --------- | ---------- |
+| ARC-Challenge | Claude    | _18.75%_   |
+| ARC-Challenge | Helpful   | _75%_      |
+| ARC-Challenge | Llama     | _18.75%_   |
+| ARC-Challenge | Slopfried | **3.125%** |
+| GSM8K         | Claude    | _6.25%_    |
+| GSM8K         | Helpful   | **3.125%** |
+| GSM8K         | Llama     | **3.125%** |
+| GSM8K         | Slopfried | **3.125%** |
+| HellaSwag     | Claude    | **3.125%** |
+| HellaSwag     | Helpful   | _37.5%_    |
+| HellaSwag     | Llama     | **3.125%** |
+| HellaSwag     | Slopfried | **3.125%** |
+| WinoGrande    | Claude    | _6.25%_    |
+| WinoGrande    | Helpful   | **3.125%** |
+| WinoGrande    | Llama     | **3.125%** |
+| WinoGrande    | Slopfried | **3.125%** |
+
+<DownloadButton
+  fileName="pvalues.csv"
+  url="/assets/blog/ai-identity-performance/pvalues.csv"
+/>
+
+A good portion of comparisons land below the common 5% threshold,
+though many are not ultra-low p-values.
+
+Slopfried is statistically significant in several places by common criteria, and the trend is visible.
+Still, stronger claims need more samples.
+
+# Interpretation
+
+Overall, everything from ARC-Challenge is fairly close, though with a slight advantage for Slopfried.
+
+HellaSwag is also pretty close together, though Slopfried has a noticable lead over the others here.
+
+WinoGrande shows separation:
+baseline, then a slightly worse performing cluster of (Helpful/Llama/Claude), then Slopfried on top again.
+
+GSM8K has more spread between identities,
+with Claude producing the single best tested result in that benchmark.
+
+One very interesting finding:
+Slopfried seems to outperform others across the benchmark suite.
+Slopfried has a different, more negatively worded system prompt.
+
+Hypotheses:
+
+1. Slopfried performs better because it was given a "cool" name and story.
+2. Slopfried performs better because it's "trying harder" to overcome its prejudice.
+3. Slopfried performs better because of one keyword (or a combination) in the system prompt (for example, "nerd").
+
+Which one is true, if any, cannot be verified with this initial setup, more rigorous testing is needed.
+This blog post is just a quick "hey, look, that's interesting."
+
+It should be noted again that `N = 6` for this proof of concept, with `p = 3.125%` (below the usual cutoff of 5%, but not super confident).
+
+# Future
+
+- Even more samples, not just 3-6, plus bigger test suites
+- Does this happen with other names/identities in system prompts? Can we see a pattern?
+- Does this happen with other models (especially bigger ones, 70B+), not just Qwen3-4B?
+- Does this happen on more benchmarks (agentic coding, tool use, ...)? If so, are there any patterns?
+- Does the best identity change based on the task? Or is one identity dominating in every task?
+
+Hopefully you were as intrigued as I was by this experiment.
+Unfortunately, I currently do not have the time (or patience) to turn this into a full paper or thesis.
+However, if you want to do that, don't hesitate to reach out to me - I at least want to read the final results :D
+
+And if you've made it this far, I guess you found this article at least a little interesting.
+I'd very much appreciate it if you shared it with people who might enjoy it too!

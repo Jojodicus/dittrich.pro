@@ -1,0 +1,868 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  csvPath?: string;
+}
+
+interface AggregatedPoint {
+  task: string;
+  identity: string;
+  mean: number | null;
+  min: number | null;
+  max: number | null;
+  stdDev: number | null;
+  count: number;
+}
+
+const { csvPath = '/assets/blog/ai-identity-performance/runs.csv' } =
+  Astro.props as Props;
+
+const IDENTITY_ORDER = ['baseline', 'helpful', 'llama', 'claude', 'slopfried'];
+const TASK_ORDER = ['arc_challenge', 'hellaswag', 'winogrande', 'gsm8k'];
+
+const IDENTITY_LABEL: Record<string, string> = {
+  baseline: 'Baseline',
+  helpful: 'Helpful',
+  llama: 'Llama',
+  claude: 'Claude',
+  slopfried: 'Slopfried',
+};
+
+const TASK_LABEL: Record<string, string> = {
+  arc_challenge: 'ARC-Challenge',
+  hellaswag: 'HellaSwag',
+  winogrande: 'WinoGrande',
+  gsm8k: 'GSM8K',
+};
+
+// Five-color neon palette — hues spread ~72° apart around the wheel so every
+// identity is instantly distinguishable even at a glance. Each color is
+// saturated enough to read as "electric" on a dark background.
+//
+//  baseline  →  cyan      (182°)  — site primary accent
+//  helpful   →  chartreuse(96°)   — warm yellow-green, far from cyan
+//  llama     →  violet    (270°)  — site secondary accent
+//  claude    →  hot-pink  (330°)  — vivid, distinct from violet
+//  slopfried →  amber     (38°)   — warm orange, anchors the warm end
+const IDENTITY_PALETTE: Record<
+  string,
+  { base: string; top: string; bottom: string }
+> = {
+  baseline:  { base: '#00f7ff', top: '#66fbff', bottom: '#00b8c1' }, // neon cyan
+  helpful:   { base: '#aaff00', top: '#ccff66', bottom: '#6ea800' }, // electric chartreuse
+  llama:     { base: '#bf5fff', top: '#d68fff', bottom: '#8b1fd6' }, // neon violet
+  claude:    { base: '#ff2d78', top: '#ff75a8', bottom: '#b5004d' }, // hot pink
+  slopfried: { base: '#ffaa00', top: '#ffcc55', bottom: '#b86f00' }, // neon amber
+};
+
+const getIdentityColor = (identity: string) =>
+  IDENTITY_PALETTE[identity]?.base ?? '#00f7ff';
+
+const filePath = join(process.cwd(), 'public', csvPath.replace(/^\//, ''));
+const scores = new Map<string, number[]>();
+let hasCsv = true;
+
+try {
+  const csvRaw = readFileSync(filePath, 'utf-8');
+  const lines = csvRaw.split(/\r?\n/).filter((line) => line.trim().length > 0);
+
+  for (let index = 1; index < lines.length; index += 1) {
+    const columns = lines[index].split(',');
+    if (columns.length < 4) {
+      continue;
+    }
+
+    const task = columns[0]?.trim();
+    const identity = columns[1]?.trim();
+    const scoreValue = Number(columns[3]);
+
+    if (!task || !identity || !Number.isFinite(scoreValue)) {
+      continue;
+    }
+
+    const key = `${task}::${identity}`;
+    const existing = scores.get(key);
+    if (existing) {
+      existing.push(scoreValue);
+    } else {
+      scores.set(key, [scoreValue]);
+    }
+  }
+} catch {
+  hasCsv = false;
+}
+
+const points: AggregatedPoint[] = [];
+for (const task of TASK_ORDER) {
+  for (const identity of IDENTITY_ORDER) {
+    const key = `${task}::${identity}`;
+    const values = scores.get(key) ?? [];
+
+    if (values.length === 0) {
+      points.push({
+        task,
+        identity,
+        mean: null,
+        min: null,
+        max: null,
+        stdDev: null,
+        count: 0,
+      });
+      continue;
+    }
+
+    const mean = values.reduce((acc, value) => acc + value, 0) / values.length;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const variance =
+      values.length > 1
+        ? values.reduce((acc, value) => acc + (value - mean) ** 2, 0) /
+          (values.length - 1)
+        : 0;
+    const stdDev = Math.sqrt(variance);
+    points.push({ task, identity, mean, min, max, stdDev, count: values.length });
+  }
+}
+
+const allMaxPercent = points
+  .map((point) => (point.max === null ? 0 : point.max * 100))
+  .reduce((max, value) => Math.max(max, value), 0);
+
+const yMax = Math.max(5, Math.ceil((allMaxPercent + 2) / 5) * 5);
+const yTickStep = Math.max(5, Math.ceil(yMax / 5 / 5) * 5);
+const yTicks: number[] = [];
+for (let tick = 0; tick <= yMax; tick += yTickStep) {
+  yTicks.push(tick);
+}
+
+const chartWidth = 960;
+const chartHeight = 560;
+const marginTop = 42;
+const marginRight = 24;
+const marginBottom = 118;
+const marginLeft = 68;
+
+const plotWidth = chartWidth - marginLeft - marginRight;
+const plotHeight = chartHeight - marginTop - marginBottom;
+
+const taskBand = plotWidth / TASK_ORDER.length;
+const groupWidth = taskBand * 0.82;
+const barWidth = groupWidth / IDENTITY_ORDER.length;
+
+const toY = (percent: number) =>
+  marginTop + plotHeight - (percent / yMax) * plotHeight;
+
+const hasData = points.some((point) => point.mean !== null);
+---
+
+<figure class="identity-results-plot" aria-labelledby="identity-results-heading">
+  <div class="plot-head">
+    <h3 id="identity-results-heading">Benchmark Performance by Task and Identity</h3>
+    <p>Bar height = mean score. Whiskers = full min-max range over seeded runs.</p>
+  </div>
+
+  {
+    hasCsv && hasData ? (
+      <>
+        <div class="plot-wrap">
+          <svg
+            viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+            role="img"
+            aria-label="Grouped benchmark bars with min-max whiskers"
+          >
+            <defs>
+              <filter id="plotGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="2.3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+
+              {IDENTITY_ORDER.map((identity) => (
+                <linearGradient id={`bar-grad-${identity}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="0%"
+                    stop-color={IDENTITY_PALETTE[identity]?.top ?? getIdentityColor(identity)}
+                  />
+                  <stop
+                    offset="100%"
+                    stop-color={
+                      IDENTITY_PALETTE[identity]?.bottom ?? getIdentityColor(identity)
+                    }
+                  />
+                </linearGradient>
+              ))}
+
+              <linearGradient id="bar-sheen" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255, 255, 255, 0.28)" />
+                <stop offset="55%" stop-color="rgba(255, 255, 255, 0.05)" />
+                <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+              </linearGradient>
+            </defs>
+
+            {yTicks.map((tick) => {
+              const y = toY(tick);
+              return (
+                <g>
+                  <line
+                    x1={marginLeft}
+                    y1={y}
+                    x2={chartWidth - marginRight}
+                    y2={y}
+                    stroke="rgba(31, 31, 31, 0.9)"
+                    stroke-width="1"
+                  />
+                  <text
+                    x={marginLeft - 10}
+                    y={y + 4}
+                    class="axis-label"
+                    text-anchor="end"
+                  >
+                    {tick}%
+                  </text>
+                </g>
+              );
+            })}
+
+            <line
+              x1={marginLeft}
+              y1={marginTop}
+              x2={marginLeft}
+              y2={marginTop + plotHeight}
+              stroke="rgba(229, 229, 229, 0.25)"
+              stroke-width="1"
+            />
+            <line
+              x1={marginLeft}
+              y1={marginTop + plotHeight}
+              x2={chartWidth - marginRight}
+              y2={marginTop + plotHeight}
+              stroke="rgba(229, 229, 229, 0.25)"
+              stroke-width="1"
+            />
+
+            {TASK_ORDER.map((task, taskIndex) => {
+              const groupStart =
+                marginLeft + taskIndex * taskBand + (taskBand - groupWidth) / 2;
+
+              return (
+                <text
+                  x={groupStart + groupWidth / 2}
+                  y={marginTop + plotHeight + 30}
+                  class="task-label"
+                  text-anchor="middle"
+                >
+                  {TASK_LABEL[task]}
+                </text>
+              );
+            })}
+
+            {points.map((point) => {
+              if (
+                point.mean === null ||
+                point.min === null ||
+                point.max === null ||
+                point.count === 0
+              ) {
+                return null;
+              }
+
+              const taskIndex = TASK_ORDER.indexOf(point.task);
+              const identityIndex = IDENTITY_ORDER.indexOf(point.identity);
+              if (taskIndex === -1 || identityIndex === -1) {
+                return null;
+              }
+
+              const groupStart =
+                marginLeft + taskIndex * taskBand + (taskBand - groupWidth) / 2;
+              const x = groupStart + identityIndex * barWidth;
+              const meanPct = point.mean * 100;
+              const minPct = point.min * 100;
+              const maxPct = point.max * 100;
+
+              const barY = toY(meanPct);
+              const barH = marginTop + plotHeight - barY;
+              const yMin = toY(minPct);
+              const yMaxValue = toY(maxPct);
+              const centerX = x + barWidth / 2;
+
+              return (
+                <g
+                  class={`plot-point identity-${point.identity}`}
+                  data-identity={point.identity}
+                  data-task={point.task}
+                  data-identity-label={IDENTITY_LABEL[point.identity]}
+                  data-task-label={TASK_LABEL[point.task]}
+                  data-mean={meanPct.toFixed(3)}
+                  data-min={minPct.toFixed(3)}
+                  data-max={maxPct.toFixed(3)}
+                  data-stddev={((point.stdDev ?? 0) * 100).toFixed(3)}
+                  data-count={point.count}
+                  data-color={getIdentityColor(point.identity)}
+                  tabindex="0"
+                >
+                  <rect
+                    class="bar-fill"
+                    x={x + 1.5}
+                    y={barY}
+                    width={barWidth - 3}
+                    height={barH}
+                    fill={`url(#bar-grad-${point.identity})`}
+                    rx="2"
+                  />
+                  <rect
+                    class="bar-sheen"
+                    x={x + 1.5}
+                    y={barY}
+                    width={barWidth - 3}
+                    height={barH}
+                    fill="url(#bar-sheen)"
+                    rx="2"
+                  />
+
+                  {/* Glow halo behind whisker stem — uses identity color */}
+                  <line
+                    class="whisker whisker-glow"
+                    x1={centerX}
+                    y1={yMin}
+                    x2={centerX}
+                    y2={yMaxValue}
+                    stroke={getIdentityColor(point.identity)}
+                    stroke-width="5"
+                    opacity="0.7"
+                    filter="url(#plotGlow)"
+                  />
+                  {/* Dark outline under each whisker segment */}
+                  <line
+                    x1={centerX}
+                    y1={yMin}
+                    x2={centerX}
+                    y2={yMaxValue}
+                    stroke="rgba(0,0,0,0.7)"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1={centerX - 6}
+                    y1={yMin}
+                    x2={centerX + 6}
+                    y2={yMin}
+                    stroke="rgba(0,0,0,0.7)"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1={centerX - 6}
+                    y1={yMaxValue}
+                    x2={centerX + 6}
+                    y2={yMaxValue}
+                    stroke="rgba(0,0,0,0.7)"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  />
+                  {/* White core on top */}
+                  <line
+                    class="whisker"
+                    x1={centerX}
+                    y1={yMin}
+                    x2={centerX}
+                    y2={yMaxValue}
+                    stroke="rgba(255,255,255,0.92)"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="whisker"
+                    x1={centerX - 6}
+                    y1={yMin}
+                    x2={centerX + 6}
+                    y2={yMin}
+                    stroke="rgba(255,255,255,0.92)"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="whisker"
+                    x1={centerX - 6}
+                    y1={yMaxValue}
+                    x2={centerX + 6}
+                    y2={yMaxValue}
+                    stroke="rgba(255,255,255,0.92)"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+
+                  {/* Value label — hidden by default, revealed on hover/focus */}
+                  <text
+                    class="value-label"
+                    x={centerX}
+                    y={yMaxValue - 8}
+                    text-anchor="middle"
+                  >
+                    {meanPct.toFixed(1)}%
+                  </text>
+                </g>
+              );
+            })}
+
+            <text
+              x={18}
+              y={marginTop + plotHeight / 2}
+              class="axis-title"
+              transform={`rotate(-90, 18, ${marginTop + plotHeight / 2})`}
+              text-anchor="middle"
+            >
+              Score (%)
+            </text>
+          </svg>
+
+          <div class="plot-tooltip" aria-live="polite"></div>
+        </div>
+
+        <ul class="identity-legend" aria-label="Identity legend">
+          {IDENTITY_ORDER.map((identity) => (
+            <li data-identity={identity} tabindex="0" style={`--identity-color: ${getIdentityColor(identity)};`}>
+              <span
+                class="legend-dot"
+                style={`background-color: ${getIdentityColor(identity)};`}
+              />
+              <span>{IDENTITY_LABEL[identity]}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    ) : (
+      <p class="plot-error">The plot data could not be loaded.</p>
+    )
+  }
+</figure>
+
+<style>
+  .identity-results-plot {
+    margin: 2rem 0;
+    border: 1px solid var(--color-dark-border);
+    border-radius: 0.85rem;
+    background: radial-gradient(
+      circle at top,
+      rgba(0, 247, 255, 0.06),
+      rgba(10, 10, 10, 0.98) 45%
+    );
+    padding: 1rem 0.95rem 0.95rem;
+  }
+
+  .plot-head {
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .plot-head h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-dark-text);
+  }
+
+  .plot-head p {
+    margin: 0.35rem 0 0;
+    font-size: 0.92rem;
+    color: var(--color-dark-text-muted);
+  }
+
+  .plot-wrap {
+    position: relative;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .axis-label {
+    fill: var(--color-dark-text-muted);
+    font-size: 11px;
+  }
+
+  .task-label {
+    fill: var(--color-dark-text);
+    font-size: 13px;
+  }
+
+  .axis-title {
+    fill: var(--color-dark-text-muted);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .bar-fill {
+    opacity: 0.9;
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 0.85;
+    transition: all 0.2s ease;
+  }
+
+  .bar-sheen {
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+
+  .whisker {
+    transition: all 0.2s ease;
+  }
+
+  .value-label {
+    fill: var(--color-dark-text);
+    font-size: 10px;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .plot-point {
+    cursor: crosshair;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Keyboard focus ring */
+  .plot-point:focus-visible {
+    outline: none;
+  }
+
+  .plot-point:focus-visible .bar-fill {
+    filter: drop-shadow(0 0 6px var(--color-neon-cyan));
+  }
+
+  /* Dim all bars when any identity is highlighted */
+  .identity-results-plot[data-hover-identity] .plot-point {
+    opacity: 0.2;
+  }
+
+  /* Restore active identity */
+  .identity-results-plot[data-hover-identity='baseline'] .plot-point[data-identity='baseline'],
+  .identity-results-plot[data-hover-identity='helpful'] .plot-point[data-identity='helpful'],
+  .identity-results-plot[data-hover-identity='llama'] .plot-point[data-identity='llama'],
+  .identity-results-plot[data-hover-identity='claude'] .plot-point[data-identity='claude'],
+  .identity-results-plot[data-hover-identity='slopfried'] .plot-point[data-identity='slopfried'] {
+    opacity: 1;
+  }
+
+  /* Glow uses each identity's own color via data-color (set via JS) */
+  .identity-results-plot[data-hover-identity='baseline']
+    .plot-point[data-identity='baseline']
+    .bar-fill,
+  .identity-results-plot[data-hover-identity='helpful']
+    .plot-point[data-identity='helpful']
+    .bar-fill,
+  .identity-results-plot[data-hover-identity='llama']
+    .plot-point[data-identity='llama']
+    .bar-fill,
+  .identity-results-plot[data-hover-identity='claude']
+    .plot-point[data-identity='claude']
+    .bar-fill,
+  .identity-results-plot[data-hover-identity='slopfried']
+    .plot-point[data-identity='slopfried']
+    .bar-fill {
+    opacity: 1;
+  }
+
+  .identity-results-plot[data-hover-identity='baseline']
+    .plot-point[data-identity='baseline']
+    .bar-sheen,
+  .identity-results-plot[data-hover-identity='helpful']
+    .plot-point[data-identity='helpful']
+    .bar-sheen,
+  .identity-results-plot[data-hover-identity='llama']
+    .plot-point[data-identity='llama']
+    .bar-sheen,
+  .identity-results-plot[data-hover-identity='claude']
+    .plot-point[data-identity='claude']
+    .bar-sheen,
+  .identity-results-plot[data-hover-identity='slopfried']
+    .plot-point[data-identity='slopfried']
+    .bar-sheen {
+    opacity: 1;
+  }
+
+  .identity-legend {
+    list-style: none;
+    margin: 0.88rem 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.7rem 1rem;
+    color: var(--color-dark-text);
+    font-size: 0.9rem;
+  }
+
+  .identity-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .legend-dot {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 6px var(--identity-color, rgba(255, 255, 255, 0.15));
+    flex-shrink: 0;
+  }
+
+  /* Active legend item highlight */
+  .identity-results-plot[data-hover-identity='baseline']
+    .identity-legend
+    li[data-identity='baseline'],
+  .identity-results-plot[data-hover-identity='helpful']
+    .identity-legend
+    li[data-identity='helpful'],
+  .identity-results-plot[data-hover-identity='llama']
+    .identity-legend
+    li[data-identity='llama'],
+  .identity-results-plot[data-hover-identity='claude']
+    .identity-legend
+    li[data-identity='claude'],
+  .identity-results-plot[data-hover-identity='slopfried']
+    .identity-legend
+    li[data-identity='slopfried'] {
+    border-color: var(--identity-color, rgba(0, 247, 255, 0.65));
+    box-shadow:
+      0 0 10px color-mix(in srgb, var(--identity-color, #00f7ff) 35%, transparent),
+      inset 0 0 6px color-mix(in srgb, var(--identity-color, #00f7ff) 15%, transparent);
+    color: var(--color-dark-text);
+  }
+
+  /* Dim non-active legend items */
+  .identity-results-plot[data-hover-identity] .identity-legend li {
+    opacity: 0.4;
+  }
+
+  .identity-results-plot[data-hover-identity='baseline']
+    .identity-legend
+    li[data-identity='baseline'],
+  .identity-results-plot[data-hover-identity='helpful']
+    .identity-legend
+    li[data-identity='helpful'],
+  .identity-results-plot[data-hover-identity='llama']
+    .identity-legend
+    li[data-identity='llama'],
+  .identity-results-plot[data-hover-identity='claude']
+    .identity-legend
+    li[data-identity='claude'],
+  .identity-results-plot[data-hover-identity='slopfried']
+    .identity-legend
+    li[data-identity='slopfried'] {
+    opacity: 1;
+  }
+
+  .plot-tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+    background: rgba(8, 10, 12, 0.97);
+    border: 1px solid var(--color-dark-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    color: var(--color-dark-text);
+    font-size: 0.82rem;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    transition: opacity 0.14s ease;
+    max-width: min(280px, 85vw);
+    white-space: normal;
+    line-height: 1.55;
+    z-index: 2;
+  }
+
+  .plot-tooltip.visible {
+    opacity: 1;
+  }
+
+  /* Tooltip inner layout uses inline styles (injected via innerHTML, outside scoped CSS) */
+
+  .plot-error {
+    margin: 0;
+    color: var(--color-dark-text-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .identity-results-plot {
+      padding: 0.8rem 0.58rem 0.7rem;
+    }
+
+    .plot-head h3 {
+      font-size: 1.15rem;
+    }
+
+    .plot-head p {
+      font-size: 0.84rem;
+    }
+
+    .identity-legend {
+      gap: 0.5rem 0.5rem;
+      font-size: 0.82rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const plots = document.querySelectorAll('.identity-results-plot');
+
+    plots.forEach((plotNode) => {
+      if (!(plotNode instanceof HTMLElement)) {
+        return;
+      }
+      if (plotNode.dataset.plotInit === 'true') {
+        return;
+      }
+      plotNode.dataset.plotInit = 'true';
+
+      const tooltip = plotNode.querySelector('.plot-tooltip');
+      const plotWrap = plotNode.querySelector('.plot-wrap');
+      if (!(tooltip instanceof HTMLElement)) {
+        return;
+      }
+      if (!(plotWrap instanceof HTMLElement)) {
+        return;
+      }
+
+      const points = plotNode.querySelectorAll('.plot-point');
+      const legendItems = plotNode.querySelectorAll('.identity-legend li');
+
+      const clearHover = () => {
+        plotNode.removeAttribute('data-hover-identity');
+        tooltip.classList.remove('visible');
+      };
+
+      const updateTooltipPosition = (event: MouseEvent) => {
+        const bounds = plotWrap.getBoundingClientRect();
+        const rawX = event.clientX - bounds.left + 12;
+        const rawY = event.clientY - bounds.top + 12;
+        const clampedX = Math.min(
+          Math.max(rawX, 8),
+          Math.max(8, bounds.width - tooltip.offsetWidth - 8)
+        );
+        const clampedY = Math.min(
+          Math.max(rawY, 8),
+          Math.max(8, bounds.height - tooltip.offsetHeight - 8)
+        );
+        tooltip.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
+      };
+
+      points.forEach((pointNode) => {
+        if (!(pointNode instanceof SVGGElement)) {
+          return;
+        }
+
+        const activate = (event?: MouseEvent) => {
+          const {
+            identity,
+            identityLabel,
+            taskLabel,
+            mean,
+            min,
+            max,
+            stddev,
+            count,
+            color,
+          } = pointNode.dataset;
+
+          if (!identity || !identityLabel || !taskLabel || !mean || !min || !max) {
+            return;
+          }
+
+          plotNode.setAttribute('data-hover-identity', identity);
+
+          // Structured tooltip with identity color accent — inline styles required
+          // because Astro scoped CSS does not apply to runtime innerHTML content.
+          const rowStyle = 'color:#a3a3a3;display:flex;justify-content:space-between;gap:1rem;';
+          const valStyle = 'color:#e5e5e5;font-weight:500;';
+          tooltip.innerHTML = `
+            <div style="font-weight:600;margin-bottom:0.3rem;">
+              <span style="color:${color ?? '#00f7ff'}">${identityLabel}</span>
+              &mdash; ${taskLabel}
+            </div>
+            <div style="${rowStyle}"><span>Mean:</span><strong style="${valStyle}">${Number(mean).toFixed(2)}%</strong></div>
+            <div style="${rowStyle}"><span>Std dev:</span><strong style="${valStyle}">${Number(stddev ?? 0).toFixed(2)}%</strong></div>
+            <div style="${rowStyle}"><span>Range:</span><strong style="${valStyle}">${Number(min).toFixed(2)}% – ${Number(max).toFixed(2)}%</strong></div>
+            <div style="${rowStyle}"><span>Runs (n):</span><strong style="${valStyle}">${count ?? '0'}</strong></div>
+          `;
+          tooltip.classList.add('visible');
+
+          if (event) {
+            updateTooltipPosition(event);
+          } else {
+            const pointBounds = pointNode.getBoundingClientRect();
+            const wrapBounds = plotWrap.getBoundingClientRect();
+            const fallbackEvent = {
+              clientX: pointBounds.left + pointBounds.width / 2,
+              clientY: pointBounds.top + pointBounds.height / 2,
+            } as MouseEvent;
+            if (pointBounds.width > 0 || pointBounds.height > 0) {
+              updateTooltipPosition(fallbackEvent);
+            } else {
+              const centerX = wrapBounds.left + wrapBounds.width / 2;
+              const centerY = wrapBounds.top + wrapBounds.height / 2;
+              updateTooltipPosition({ clientX: centerX, clientY: centerY } as MouseEvent);
+            }
+          }
+        };
+
+        pointNode.addEventListener('mouseenter', (event) => {
+          activate(event);
+        });
+        pointNode.addEventListener('mousemove', (event) => {
+          updateTooltipPosition(event);
+        });
+        pointNode.addEventListener('mouseleave', () => {
+          clearHover();
+        });
+
+        pointNode.addEventListener('focus', () => {
+          activate();
+        });
+        pointNode.addEventListener('blur', () => {
+          clearHover();
+        });
+      });
+
+      plotNode.addEventListener('mouseleave', () => {
+        clearHover();
+      });
+
+      legendItems.forEach((legendItem) => {
+        if (!(legendItem instanceof HTMLElement)) {
+          return;
+        }
+        const identity = legendItem.dataset.identity;
+        if (!identity) {
+          return;
+        }
+
+        const setLegendHover = () => {
+          plotNode.setAttribute('data-hover-identity', identity);
+          tooltip.classList.remove('visible');
+        };
+
+        legendItem.addEventListener('mouseenter', setLegendHover);
+        legendItem.addEventListener('focus', setLegendHover);
+        legendItem.addEventListener('mouseleave', clearHover);
+        legendItem.addEventListener('blur', clearHover);
+      });
+    });
+  });
+</script>
