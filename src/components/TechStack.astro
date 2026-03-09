@@ -70,8 +70,16 @@ function getCarouselItems(items: TechItem[]): TechItem[] {
 </section>
 
 <style>
+  .tech-item {
+    /* Prevent Safari clipping and flickering on composited layers */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
   .tech-item:hover {
-    filter: drop-shadow(0 0 12px var(--glow-color, #fff));
+    /* box-shadow is more reliable than drop-shadow in Safari mobile for rounded containers */
+    box-shadow: 0 0 24px var(--glow-color, #fff);
   }
 </style>
 
@@ -116,7 +124,7 @@ function getCarouselItems(items: TechItem[]): TechItem[] {
       if (pos < -2 * LOOP_WIDTH) pos += LOOP_WIDTH;
       if (pos > -LOOP_WIDTH) pos -= LOOP_WIDTH;
 
-      track.style.transform = `translateX(${pos}px)`;
+      track.style.transform = `translate3d(${pos}px, 0, 0)`;
       requestAnimationFrame(animate);
     };
 
