@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 const imprint = await getCollection('imprint');
 const imprintContent = imprint[0];
-const { Content } = await imprintContent.render();
+const { Content } = await render(imprintContent);
 ---
 
 <Layout title="Imprint - dittrich.pro" noindex={true}>

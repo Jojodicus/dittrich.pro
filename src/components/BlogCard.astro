@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
@@ -7,7 +8,7 @@ interface Props {
   date: Date;
   readTime: number;
   slug: string;
-  thumbnail?: any;
+  thumbnail?: ImageMetadata;
 }
 
 const { title, description, date, readTime, slug, thumbnail } = Astro.props;
@@ -24,22 +25,25 @@ const formatDate = (date: Date) => {
 <article
   class="group bg-dark-surface border border-dark-border rounded-3xl overflow-hidden transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(0,247,255,0.6)] animate-on-scroll h-full"
 >
-  <a href={`/blog/${slug}`} class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-3xl flex flex-col h-full">
-      <div class="overflow-hidden flex-none">
-          {
-            thumbnail ? (
-              <Image
-                src={thumbnail}
-                alt={title}
-                class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-            <div class="w-full h-64 bg-gradient-to-br from-dark-bg to-dark-surface flex items-center justify-center">
-              <span class="text-4xl">📝</span>
-            </div>
-          )
-        }
-      </div>
+  <a
+    href={`/blog/${slug}`}
+    class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/50 rounded-3xl flex flex-col h-full"
+  >
+    <div class="overflow-hidden flex-none">
+      {
+        thumbnail ? (
+          <Image
+            src={thumbnail}
+            alt={title}
+            class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div class="w-full h-64 bg-gradient-to-br from-dark-bg to-dark-surface flex items-center justify-center">
+            <span class="text-4xl">📝</span>
+          </div>
+        )
+      }
+    </div>
 
     <div class="p-6 flex flex-col flex-1">
       <div

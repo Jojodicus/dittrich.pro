@@ -1,6 +1,6 @@
 # [dittrich.pro](https://dittrich.pro)
 
-Personal portfolio website built with Astro 5.
+Personal portfolio website built with Astro.
 
 ## Tech Stack
 

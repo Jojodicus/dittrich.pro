@@ -41,9 +41,18 @@ const getReadTime = (post: CollectionEntry<'blog'>): number => {
       </div>
 
       <div class="grid grid-cols-1 gap-6 mb-12">
-        {posts.map((post: CollectionEntry<'blog'>) => (
-          <BlogCard title={post.data.title} description={post.data.description} date={post.data.date} readTime={getReadTime(post)} slug={post.slug} thumbnail={post.data.thumbnail} />
-        ))}
+        {
+          posts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              readTime={getReadTime(post)}
+              slug={post.id}
+              thumbnail={post.data.thumbnail}
+            />
+          ))
+        }
       </div>
 
       {

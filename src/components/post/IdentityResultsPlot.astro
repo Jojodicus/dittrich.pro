@@ -50,10 +50,10 @@ const IDENTITY_PALETTE: Record<
   string,
   { base: string; top: string; bottom: string }
 > = {
-  baseline:  { base: '#00f7ff', top: '#66fbff', bottom: '#00b8c1' }, // neon cyan
-  helpful:   { base: '#aaff00', top: '#ccff66', bottom: '#6ea800' }, // electric chartreuse
-  llama:     { base: '#bf5fff', top: '#d68fff', bottom: '#8b1fd6' }, // neon violet
-  claude:    { base: '#ff2d78', top: '#ff75a8', bottom: '#b5004d' }, // hot pink
+  baseline: { base: '#00f7ff', top: '#66fbff', bottom: '#00b8c1' }, // neon cyan
+  helpful: { base: '#aaff00', top: '#ccff66', bottom: '#6ea800' }, // electric chartreuse
+  llama: { base: '#bf5fff', top: '#d68fff', bottom: '#8b1fd6' }, // neon violet
+  claude: { base: '#ff2d78', top: '#ff75a8', bottom: '#b5004d' }, // hot pink
   slopfried: { base: '#ffaa00', top: '#ffcc55', bottom: '#b86f00' }, // neon amber
 };
 
@@ -122,7 +122,15 @@ for (const task of TASK_ORDER) {
           (values.length - 1)
         : 0;
     const stdDev = Math.sqrt(variance);
-    points.push({ task, identity, mean, min, max, stdDev, count: values.length });
+    points.push({
+      task,
+      identity,
+      mean,
+      min,
+      max,
+      stdDev,
+      count: values.length,
+    });
   }
 }
 
@@ -157,10 +165,17 @@ const toY = (percent: number) =>
 const hasData = points.some((point) => point.mean !== null);
 ---
 
-<figure class="identity-results-plot" aria-labelledby="identity-results-heading">
+<figure
+  class="identity-results-plot"
+  aria-labelledby="identity-results-heading"
+>
   <div class="plot-head">
-    <h3 id="identity-results-heading">Benchmark Performance by Task and Identity</h3>
-    <p>Bar height = mean score. Whiskers = full min-max range over seeded runs.</p>
+    <h3 id="identity-results-heading">
+      Benchmark Performance by Task and Identity
+    </h3>
+    <p>
+      Bar height = mean score. Whiskers = full min-max range over seeded runs.
+    </p>
   </div>
 
   {
@@ -173,7 +188,13 @@ const hasData = points.some((point) => point.mean !== null);
             aria-label="Grouped benchmark bars with min-max whiskers"
           >
             <defs>
-              <filter id="plotGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <filter
+                id="plotGlow"
+                x="-60%"
+                y="-60%"
+                width="220%"
+                height="220%"
+              >
                 <feGaussianBlur stdDeviation="2.3" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
@@ -181,17 +202,26 @@ const hasData = points.some((point) => point.mean !== null);
                 </feMerge>
               </filter>
 
-
               {IDENTITY_ORDER.map((identity) => (
-                <linearGradient id={`bar-grad-${identity}`} x1="0" y1="0" x2="0" y2="1">
+                <linearGradient
+                  id={`bar-grad-${identity}`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
                   <stop
                     offset="0%"
-                    stop-color={IDENTITY_PALETTE[identity]?.top ?? getIdentityColor(identity)}
+                    stop-color={
+                      IDENTITY_PALETTE[identity]?.top ??
+                      getIdentityColor(identity)
+                    }
                   />
                   <stop
                     offset="100%"
                     stop-color={
-                      IDENTITY_PALETTE[identity]?.bottom ?? getIdentityColor(identity)
+                      IDENTITY_PALETTE[identity]?.bottom ??
+                      getIdentityColor(identity)
                     }
                   />
                 </linearGradient>
@@ -420,12 +450,16 @@ const hasData = points.some((point) => point.mean !== null);
             </text>
           </svg>
 
-          <div class="plot-tooltip" aria-live="polite"></div>
+          <div class="plot-tooltip" aria-live="polite" />
         </div>
 
         <ul class="identity-legend" aria-label="Identity legend">
           {IDENTITY_ORDER.map((identity) => (
-            <li data-identity={identity} tabindex="0" style={`--identity-color: ${getIdentityColor(identity)};`}>
+            <li
+              data-identity={identity}
+              tabindex="0"
+              style={`--identity-color: ${getIdentityColor(identity)};`}
+            >
               <span
                 class="legend-dot"
                 style={`background-color: ${getIdentityColor(identity)};`}
@@ -542,11 +576,16 @@ const hasData = points.some((point) => point.mean !== null);
   }
 
   /* Restore active identity */
-  .identity-results-plot[data-hover-identity='baseline'] .plot-point[data-identity='baseline'],
-  .identity-results-plot[data-hover-identity='helpful'] .plot-point[data-identity='helpful'],
-  .identity-results-plot[data-hover-identity='llama'] .plot-point[data-identity='llama'],
-  .identity-results-plot[data-hover-identity='claude'] .plot-point[data-identity='claude'],
-  .identity-results-plot[data-hover-identity='slopfried'] .plot-point[data-identity='slopfried'] {
+  .identity-results-plot[data-hover-identity='baseline']
+    .plot-point[data-identity='baseline'],
+  .identity-results-plot[data-hover-identity='helpful']
+    .plot-point[data-identity='helpful'],
+  .identity-results-plot[data-hover-identity='llama']
+    .plot-point[data-identity='llama'],
+  .identity-results-plot[data-hover-identity='claude']
+    .plot-point[data-identity='claude'],
+  .identity-results-plot[data-hover-identity='slopfried']
+    .plot-point[data-identity='slopfried'] {
     opacity: 1;
   }
 
@@ -637,8 +676,10 @@ const hasData = points.some((point) => point.mean !== null);
     li[data-identity='slopfried'] {
     border-color: var(--identity-color, rgba(0, 247, 255, 0.65));
     box-shadow:
-      0 0 10px color-mix(in srgb, var(--identity-color, #00f7ff) 35%, transparent),
-      inset 0 0 6px color-mix(in srgb, var(--identity-color, #00f7ff) 15%, transparent);
+      0 0 10px
+        color-mix(in srgb, var(--identity-color, #00f7ff) 35%, transparent),
+      inset 0 0 6px
+        color-mix(in srgb, var(--identity-color, #00f7ff) 15%, transparent);
     color: var(--color-dark-text);
   }
 
@@ -781,7 +822,14 @@ const hasData = points.some((point) => point.mean !== null);
             color,
           } = pointNode.dataset;
 
-          if (!identity || !identityLabel || !taskLabel || !mean || !min || !max) {
+          if (
+            !identity ||
+            !identityLabel ||
+            !taskLabel ||
+            !mean ||
+            !min ||
+            !max
+          ) {
             return;
           }
 
@@ -789,7 +837,8 @@ const hasData = points.some((point) => point.mean !== null);
 
           // Structured tooltip with identity color accent — inline styles required
           // because Astro scoped CSS does not apply to runtime innerHTML content.
-          const rowStyle = 'color:#a3a3a3;display:flex;justify-content:space-between;gap:1rem;';
+          const rowStyle =
+            'color:#a3a3a3;display:flex;justify-content:space-between;gap:1rem;';
           const valStyle = 'color:#e5e5e5;font-weight:500;';
           tooltip.innerHTML = `
             <div style="font-weight:600;margin-bottom:0.3rem;">
@@ -817,7 +866,10 @@ const hasData = points.some((point) => point.mean !== null);
             } else {
               const centerX = wrapBounds.left + wrapBounds.width / 2;
               const centerY = wrapBounds.top + wrapBounds.height / 2;
-              updateTooltipPosition({ clientX: centerX, clientY: centerY } as MouseEvent);
+              updateTooltipPosition({
+                clientX: centerX,
+                clientY: centerY,
+              } as MouseEvent);
             }
           }
         };

@@ -1,19 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { calculateReadingTime } from '../../utils/reading-time';
 import Admonition from '../../components/Admonition.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content, headings } = await post.render();
+const { Content, headings } = await render(post);
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', {
@@ -58,20 +58,20 @@ const postImage = post.data.thumbnail || '/assets/avatar.jpg';
 
         <h1
           class="text-4xl md:text-5xl font-bold mb-4"
-          style={`view-transition-name: blog-title-${post.slug}`}
+          style={`view-transition-name: blog-title-${post.id}`}
         >
           {post.data.title}
         </h1>
         <p
           class="text-xl text-dark-text-muted mb-6"
-          style={`view-transition-name: blog-desc-${post.slug}`}
+          style={`view-transition-name: blog-desc-${post.id}`}
         >
           {post.data.description}
         </p>
 
         <div
           class="flex items-center gap-4 text-sm text-dark-text-muted"
-          style={`view-transition-name: blog-meta-${post.slug}`}
+          style={`view-transition-name: blog-meta-${post.id}`}
         >
           <time datetime={post.data.date.toISOString()}
             >{formatDate(post.data.date)}</time

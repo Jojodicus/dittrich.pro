@@ -4,14 +4,14 @@
 
 ## Project Overview
 
-Personal portfolio website built with Astro 5, TypeScript, and Tailwind CSS. Features blog, project showcase, tech stack carousel, and view transitions.
+Personal portfolio website built with Astro 7, TypeScript, and Tailwind CSS. Features blog, project showcase, tech stack carousel, and view transitions.
 
 ## Tech Stack
 
-- **Framework**: Astro 5 (static build)
+- **Framework**: Astro 7 (static build)
 - **Styling**: Tailwind CSS v4
 - **Icons**: astro-icon (lucide, lineicons, cib)
-- **Content**: Astro content collections
+- **Content**: Astro content collections (Content Layer API with `glob()` loaders)
 - **Language**: TypeScript
 - **Linting**: ESLint + Prettier
 
@@ -49,7 +49,8 @@ const { title = 'default', noindex = false } = Astro.props;
 
 - Use absolute imports (configured in tsconfig)
 - Icons: `import { Icon } from 'astro-icon/components'`
-- Content collections: `import { getCollection } from 'astro:content'`
+- Content collections: `import { getCollection, render } from 'astro:content'`
+- Zod schemas: `import { z } from 'astro/zod'` (the `astro:content` re-export is deprecated)
 
 ### Naming Conventions
 
@@ -117,15 +118,33 @@ Use the reusable `Button.astro` component:
 
 ### Content Collections (Blog)
 
+Collections use the **Content Layer API** (Astro v5+). The schema/loader config lives in
+`src/content.config.ts` (NOT the removed `src/content/config.ts`), and each collection defines a
+`glob()` loader pointing at its content directory.
+
+Post frontmatter:
+
 ```yaml
 ---
 title: 'Post Title'
 description: 'Post description'
 date: 2026-01-15
-thumbnail: '/assets/blog/slug/image.jpg'
+thumbnail: '../../images/blog/slug/image.png' # relative path, resolved by the image() schema helper
 readTime: 5
 ---
 ```
+
+Rendering and identifiers:
+
+- Render an entry with the standalone `render()` function, not the removed `entry.render()` method:
+  `const { Content, headings } = await render(post);`
+- An entry's slug is `entry.id` (derived from the filename by the `glob()` loader). `entry.slug` was
+  removed — use `entry.id` for routes (`params: { slug: post.id }`), links, and view-transition names.
+
+> **Parser gotcha**: Do NOT put inline TypeScript generic annotations inside `.astro` template
+> expressions, e.g. `{posts.map((post: CollectionEntry<'blog'>) => ...)}`. `astro-eslint-parser`
+> misreads the `<'blog'>` as a `<>` fragment and fails to parse. Rely on inference instead
+> (`{posts.map((post) => ...)}`); annotate in the frontmatter script where needed.
 
 ## Formatting (Prettier)
 
